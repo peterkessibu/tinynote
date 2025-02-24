@@ -1,8 +1,14 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -10,26 +16,34 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { PlusCircle, Pencil, TagIcon, Bold, Italic, List, Sparkles } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { useEditor, EditorContent } from "@tiptap/react"
-import StarterKit from "@tiptap/starter-kit"
-import { Toggle } from "@/components/ui/toggle"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  PlusCircle,
+  Pencil,
+  TagIcon,
+  Bold,
+  Italic,
+  List,
+  Sparkles,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { Toggle } from "@/components/ui/toggle";
 
 type Note = {
-  id: string
-  title: string
-  content: string
-  tags: string[]
-  createdAt: Date
-}
+  id: string;
+  title: string;
+  content: string;
+  tags: string[];
+  createdAt: Date;
+};
 
 const MenuBar = ({ editor }: { editor: any }) => {
   if (!editor) {
-    return null
+    return null;
   }
 
   return (
@@ -56,17 +70,18 @@ const MenuBar = ({ editor }: { editor: any }) => {
         <List className="h-4 w-4" />
       </Toggle>
     </div>
-  )
-}
+  );
+};
 
 export default function NotesApp() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isEditing, setIsEditing] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [notes, setNotes] = useState<Note[]>([
     {
       id: "1",
       title: "Shopping List",
-      content: "<ul><li>Milk</li><li>Eggs</li><li>Bread</li><li>Fruits</li><li>Vegetables</li></ul>",
+      content:
+        "<ul><li>Milk</li><li>Eggs</li><li>Bread</li><li>Fruits</li><li>Vegetables</li></ul>",
       tags: ["shopping", "groceries"],
       createdAt: new Date("2024-02-22"),
     },
@@ -86,21 +101,21 @@ export default function NotesApp() {
       tags: ["work", "meetings"],
       createdAt: new Date("2024-02-17"),
     },
-  ])
+  ]);
   const [currentNote, setCurrentNote] = useState({
     id: "",
     title: "",
     content: "",
     tags: "",
-  })
+  });
 
   const editor = useEditor({
     extensions: [StarterKit],
     content: currentNote.content,
     onUpdate: ({ editor }) => {
-      setCurrentNote((prev) => ({ ...prev, content: editor.getHTML() }))
+      setCurrentNote((prev) => ({ ...prev, content: editor.getHTML() }));
     },
-  })
+  });
 
   const handleCreateNote = () => {
     const note: Note = {
@@ -112,11 +127,11 @@ export default function NotesApp() {
         .map((tag) => tag.trim())
         .filter(Boolean),
       createdAt: new Date(),
-    }
+    };
 
-    setNotes((prev) => [note, ...prev])
-    handleCloseModal()
-  }
+    setNotes((prev) => [note, ...prev]);
+    handleCloseModal();
+  };
 
   const handleEditNote = () => {
     setNotes((prev) =>
@@ -133,16 +148,16 @@ export default function NotesApp() {
             }
           : note,
       ),
-    )
-    handleCloseModal()
-  }
+    );
+    handleCloseModal();
+  };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false)
-    setIsEditing(false)
-    setCurrentNote({ id: "", title: "", content: "", tags: "" })
-    editor?.commands.setContent("")
-  }
+    setIsModalOpen(false);
+    setIsEditing(false);
+    setCurrentNote({ id: "", title: "", content: "", tags: "" });
+    editor?.commands.setContent("");
+  };
 
   const handleOpenEditModal = (note: Note) => {
     setCurrentNote({
@@ -150,11 +165,11 @@ export default function NotesApp() {
       title: note.title,
       content: note.content,
       tags: note.tags.join(", "),
-    })
-    editor?.commands.setContent(note.content)
-    setIsEditing(true)
-    setIsModalOpen(true)
-  }
+    });
+    editor?.commands.setContent(note.content);
+    setIsEditing(true);
+    setIsModalOpen(true);
+  };
 
   const handleAIAssist = async () => {
     // This is a placeholder for AI functionality
@@ -164,22 +179,26 @@ export default function NotesApp() {
 <li><strong>Key Points</strong></li>
 <li><strong>Action Items</strong></li>
 </ul>
-<p>Feel free to modify this structure!</p>`
+<p>Feel free to modify this structure!</p>`;
 
-    editor?.commands.setContent(aiContent)
-    setCurrentNote((prev) => ({ ...prev, content: aiContent }))
-  }
+    editor?.commands.setContent(aiContent);
+    setCurrentNote((prev) => ({ ...prev, content: aiContent }));
+  };
 
   const formatDate = (date: Date) => {
-    const now = new Date()
-    const diff = now.getTime() - date.getTime()
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-    if (days === 0) return "Today"
-    if (days === 1) return "Yesterday"
-    if (days < 7) return `${days} days ago`
-    return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
-  }
+    if (days === 0) return "Today";
+    if (days === 1) return "Yesterday";
+    if (days < 7) return `${days} days ago`;
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
 
   return (
     <div className="container mx-auto p-4 space-y-4">
@@ -188,8 +207,8 @@ export default function NotesApp() {
         <Button
           className="gap-2"
           onClick={() => {
-            setIsEditing(false)
-            setIsModalOpen(true)
+            setIsEditing(false);
+            setIsModalOpen(true);
           }}
         >
           <PlusCircle className="h-4 w-4" />
@@ -199,7 +218,10 @@ export default function NotesApp() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {notes.map((note) => (
-          <Card key={note.id} className="hover:shadow-lg transition-shadow group">
+          <Card
+            key={note.id}
+            className="hover:shadow-lg transition-shadow group"
+          >
             <CardHeader className="relative">
               <Button
                 variant="ghost"
@@ -211,7 +233,9 @@ export default function NotesApp() {
                 <span className="sr-only">Edit note</span>
               </Button>
               <CardTitle>{note.title}</CardTitle>
-              <CardDescription>Created {formatDate(note.createdAt)}</CardDescription>
+              <CardDescription>
+                Created {formatDate(note.createdAt)}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div
@@ -233,9 +257,13 @@ export default function NotesApp() {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-[725px]">
           <DialogHeader>
-            <DialogTitle>{isEditing ? "Edit Note" : "Create New Note"}</DialogTitle>
+            <DialogTitle>
+              {isEditing ? "Edit Note" : "Create New Note"}
+            </DialogTitle>
             <DialogDescription>
-              {isEditing ? "Edit your note details below." : "Add a new note with a title, content, and optional tags."}
+              {isEditing
+                ? "Edit your note details below."
+                : "Add a new note with a title, content, and optional tags."}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -245,14 +273,19 @@ export default function NotesApp() {
                 id="title"
                 placeholder="Note title"
                 value={currentNote.title}
-                onChange={(e) => setCurrentNote((prev) => ({ ...prev, title: e.target.value }))}
+                onChange={(e) =>
+                  setCurrentNote((prev) => ({ ...prev, title: e.target.value }))
+                }
               />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="content">Content</Label>
               <div className="border rounded-md p-2">
                 <MenuBar editor={editor} />
-                <EditorContent editor={editor} className="min-h-[150px] prose prose-sm max-w-none" />
+                <EditorContent
+                  editor={editor}
+                  className="min-h-[150px] prose prose-sm max-w-none"
+                />
               </div>
             </div>
             <div className="grid gap-2">
@@ -264,12 +297,18 @@ export default function NotesApp() {
                 id="tags"
                 placeholder="work, ideas, todo"
                 value={currentNote.tags}
-                onChange={(e) => setCurrentNote((prev) => ({ ...prev, tags: e.target.value }))}
+                onChange={(e) =>
+                  setCurrentNote((prev) => ({ ...prev, tags: e.target.value }))
+                }
               />
             </div>
           </div>
           <DialogFooter className="flex items-center justify-between sm:justify-between">
-            <Button variant="secondary" onClick={handleAIAssist} className="gap-2">
+            <Button
+              variant="secondary"
+              onClick={handleAIAssist}
+              className="gap-2"
+            >
               <Sparkles className="h-4 w-4" />
               AI Assist
             </Button>
@@ -279,7 +318,9 @@ export default function NotesApp() {
               </Button>
               <Button
                 onClick={isEditing ? handleEditNote : handleCreateNote}
-                disabled={!currentNote.title.trim() || !currentNote.content.trim()}
+                disabled={
+                  !currentNote.title.trim() || !currentNote.content.trim()
+                }
               >
                 {isEditing ? "Save Changes" : "Create Note"}
               </Button>
@@ -288,6 +329,5 @@ export default function NotesApp() {
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }
-

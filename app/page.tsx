@@ -1,4 +1,3 @@
-// filepath: /c:/Users/Zhee/Pictures/Folderz/tinyNotes/tinynote/app/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -7,6 +6,7 @@ import { PlusCircle } from "lucide-react";
 import NoteList from "@/components/NoteList";
 import NoteModal, { NoteForm } from "@/components/NoteModal";
 import { Note } from "@/components/NoteCard";
+import Header from "@/components/Header";
 
 export default function NotesApp() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,8 +16,7 @@ export default function NotesApp() {
     {
       id: "1",
       title: "Shopping List",
-      content:
-        "MilkEggsBreadFruitsVegetables",
+      content: "MilkEggsBreadFruitsVegetables",
       tags: ["shopping", "groceries"],
       createdAt: new Date("2024-02-22"),
     },
@@ -57,9 +56,9 @@ export default function NotesApp() {
       title: currentNote.title,
       content: currentNote.content,
       tags: currentNote.tags
-      .split(",")
-      .map((tag: string) => tag.trim())
-      .filter(Boolean),
+        .split(",")
+        .map((tag: string) => tag.trim())
+        .filter(Boolean),
       createdAt: new Date(),
     };
 
@@ -82,8 +81,8 @@ export default function NotesApp() {
                 .map((tag: string) => tag.trim())
                 .filter(Boolean),
             }
-          : note
-      )
+          : note,
+      ),
     );
     handleCloseModal();
   };
@@ -105,10 +104,6 @@ export default function NotesApp() {
     setIsModalOpen(true);
   };
 
-  const handleAIAssist = async () => {
-    // This is a placeholder for AI functionality
-  };
-
   const formatDate = (date: Date) => {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
@@ -125,40 +120,42 @@ export default function NotesApp() {
   };
 
   return (
-    <div className="container mx-auto p-4 space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">My Notes</h1>
-        <Button
-          className="gap-2"
-          onClick={() => {
-            setIsEditing(false);
-            setIsModalOpen(true);
-          }}
-        >
-          <PlusCircle className="h-4 w-4" />
-          Add Note
-        </Button>
+    <div className="mx-auto p-4 flex flex-col space-y-4">
+      <Header />
+      <div className="mx-8">
+        <div className="flex items-center justify-between my-4">
+          <h1 className="text-2xl font-bold">My Notes</h1>
+          <Button
+            className="gap-2 bg-blue-700 hover:scale-[1.02] hover:bg-blue-800 active:border"
+            onClick={() => {
+              setIsEditing(false);
+              setIsModalOpen(true);
+            }}
+          >
+            <PlusCircle className="h-4 w-4" />
+            Add Note
+          </Button>
+        </div>
+
+        <NoteList
+          notes={notes}
+          formatDate={formatDate}
+          handleOpenEditModal={handleOpenEditModal}
+        />
+
+        <NoteModal
+          isModalOpen={isModalOpen}
+          isEditing={isEditing}
+          currentNote={currentNote}
+          newNote={newNote}
+          setIsModalOpen={setIsModalOpen}
+          setCurrentNote={setCurrentNote}
+          setNewNote={setNewNote}
+          handleCreateNote={handleCreateNote}
+          handleEditNote={handleEditNote}
+          handleCloseModal={handleCloseModal}
+        />
       </div>
-
-      <NoteList
-        notes={notes}
-        formatDate={formatDate}
-        handleOpenEditModal={handleOpenEditModal}
-      />
-
-      <NoteModal
-        isModalOpen={isModalOpen}
-        isEditing={isEditing}
-        currentNote={currentNote}
-        newNote={newNote}
-        setIsModalOpen={setIsModalOpen}
-        setCurrentNote={setCurrentNote}
-        setNewNote={setNewNote}
-        handleCreateNote={handleCreateNote}
-        handleEditNote={handleEditNote}
-        handleCloseModal={handleCloseModal}
-        handleAIAssist={handleAIAssist}
-      />
     </div>
   );
 }

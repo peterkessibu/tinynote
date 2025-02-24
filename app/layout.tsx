@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import Header from "@/components/Header";
+import "./globals.css";
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "700"],
 });
-import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={poppins.className}>{children}</body>
+      <body className={poppins.className}>
+        <Header />
+        {children}
+        </body>
     </html>
   );
 }

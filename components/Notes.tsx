@@ -6,7 +6,6 @@ import { PlusCircle } from "lucide-react";
 import NoteList from "@/components/NoteList";
 import NoteModal, { NoteForm } from "@/components/NoteModal";
 import { Note } from "@/components/NoteCard";
-import Header from "@/components/Header";
 
 export default function NotesApp() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -121,12 +120,12 @@ export default function NotesApp() {
 
   return (
     <div className="relative mx-auto p-4 flex flex-col space-y-4">
-      <Header />{" "}
       <div className="mx-8">
         <div className="flex items-center justify-between my-4">
           <h1 className="text-2xl font-bold">My Notes</h1>
           <Button
-            className="gap-2 bg-blue-700 hover:scale-[1.02] hover:bg-blue-800 active:border"
+          
+            className="gap-2 bg-blue-700 hover:scale-[1.02] rounded-xl py-2 px-4 hover:bg-blue-800 active:border"
             onClick={() => {
               setIsEditing(false);
               setIsModalOpen(true);

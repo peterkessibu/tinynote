@@ -12,7 +12,7 @@ export default function Hero() {
     <div className="relative min-h-[calc(100vh-76px)] flex items-center">
       {/* Floating papers background */}
       <div className="absolute inset-0 overflow-hidden">
-        <FloatingPaper count={6} />
+        <FloatingPaper count={9} />
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
@@ -23,7 +23,7 @@ export default function Hero() {
             transition={{ duration: 0.5 }}
           >
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
-              Transform Your Research with
+              Transform Your Notes with
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
                 {" "}
                 AI Power
@@ -37,8 +37,8 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-gray-400 text-xl mb-8 max-w-2xl mx-auto"
           >
-            Upload your research papers and let our AI transform them into
-            engaging presentations, podcasts, and visual content.
+            Write down your notes, and our AI will transform them into clear
+            summaries, engaging presentations, and interactive insights.
           </motion.p>
 
           <motion.div

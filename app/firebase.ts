@@ -12,7 +12,7 @@ const firebaseConfig = {
   storageBucket: "tinynote-3d742.firebasestorage.app",
   messagingSenderId: "443268115449",
   appId: "1:443268115449:web:09b549fc142d66e672eb28",
-  measurementId: "G-6RYR3NZBRF"
+  measurementId: "G-6RYR3NZBRF",
 };
 
 // Initialize Firebase

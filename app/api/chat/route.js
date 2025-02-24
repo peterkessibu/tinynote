@@ -20,7 +20,10 @@ export async function POST(request) {
   try {
     const { input, title } = await request.json();
     if (!input) {
-      return NextResponse.json({ error: "Content is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Content is required" },
+        { status: 400 },
+      );
     }
 
     const prompt = `
@@ -53,7 +56,10 @@ Ensure a valid JSON response.
     // Ensure Gemini API returned a response
     if (!result || !result.response) {
       console.error("Gemini API did not return a valid response");
-      return NextResponse.json({ error: "AI Service Unavailable" }, { status: 503 });
+      return NextResponse.json(
+        { error: "AI Service Unavailable" },
+        { status: 503 },
+      );
     }
 
     const textResponse = await result.response.text();
@@ -68,29 +74,36 @@ Ensure a valid JSON response.
       if (!analysis.structuredContent) analysis.structuredContent = input;
       if (!analysis.suggestedTags) analysis.suggestedTags = "";
       if (!analysis.suggestedTitle) analysis.suggestedTitle = "";
-
     } catch (error) {
       console.error("JSON Parsing Error:", error, textResponse);
 
       // If JSON parsing fails, try to extract data using regex
       try {
-        const structuredContentMatch = textResponse.match(/"structuredContent"\s*:\s*"([^"]*)"/);
-        const suggestedTagsMatch = textResponse.match(/"suggestedTags"\s*:\s*"([^"]*)"/);
-        const suggestedTitleMatch = textResponse.match(/"suggestedTitle"\s*:\s*"([^"]*)"/);
+        const structuredContentMatch = textResponse.match(
+          /"structuredContent"\s*:\s*"([^"]*)"/,
+        );
+        const suggestedTagsMatch = textResponse.match(
+          /"suggestedTags"\s*:\s*"([^"]*)"/,
+        );
+        const suggestedTitleMatch = textResponse.match(
+          /"suggestedTitle"\s*:\s*"([^"]*)"/,
+        );
 
         analysis = {
-          structuredContent: structuredContentMatch ? structuredContentMatch[1] : input,
+          structuredContent: structuredContentMatch
+            ? structuredContentMatch[1]
+            : input,
           suggestedTags: suggestedTagsMatch ? suggestedTagsMatch[1] : "",
-          suggestedTitle: suggestedTitleMatch ? suggestedTitleMatch[1] : ""
+          suggestedTitle: suggestedTitleMatch ? suggestedTitleMatch[1] : "",
         };
       } catch (error) {
         // If all else fails, return the original input with error message
-        console.log(error)
+        console.log(error);
         return NextResponse.json({
           structuredContent: input,
           suggestedTags: "",
           suggestedTitle: "",
-          error: "Could not process AI response"
+          error: "Could not process AI response",
         });
       }
     }
@@ -98,11 +111,14 @@ Ensure a valid JSON response.
     return NextResponse.json(analysis);
   } catch (error) {
     console.error("Server Error:", error);
-    return NextResponse.json({
-      structuredContent: input || "",
-      suggestedTags: "",
-      suggestedTitle: "",
-      error: "Internal Server Error"
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        structuredContent: input || "",
+        suggestedTags: "",
+        suggestedTitle: "",
+        error: "Internal Server Error",
+      },
+      { status: 500 },
+    );
   }
 }

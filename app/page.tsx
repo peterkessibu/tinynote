@@ -16,8 +16,7 @@ export default function NotesApp() {
     {
       id: "1",
       title: "Shopping List",
-      content:
-        "MilkEggsBreadFruitsVegetables",
+      content: "MilkEggsBreadFruitsVegetables",
       tags: ["shopping", "groceries"],
       createdAt: new Date("2024-02-22"),
     },
@@ -57,9 +56,9 @@ export default function NotesApp() {
       title: currentNote.title,
       content: currentNote.content,
       tags: currentNote.tags
-      .split(",")
-      .map((tag: string) => tag.trim())
-      .filter(Boolean),
+        .split(",")
+        .map((tag: string) => tag.trim())
+        .filter(Boolean),
       createdAt: new Date(),
     };
 
@@ -82,8 +81,8 @@ export default function NotesApp() {
                 .map((tag: string) => tag.trim())
                 .filter(Boolean),
             }
-          : note
-      )
+          : note,
+      ),
     );
     handleCloseModal();
   };
@@ -146,7 +145,7 @@ export default function NotesApp() {
         handleOpenEditModal={handleOpenEditModal}
       />
 
-        <NoteModal
+      <NoteModal
         isModalOpen={isModalOpen}
         isEditing={isEditing}
         currentNote={currentNote}

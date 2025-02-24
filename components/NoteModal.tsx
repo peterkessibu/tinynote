@@ -63,7 +63,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
         },
         {
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
 
       const data = response.data;

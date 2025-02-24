@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 import {
   Dialog,
   DialogContent,
@@ -31,7 +32,6 @@ type NoteModalProps = {
   handleCreateNote: () => void;
   handleEditNote: () => void;
   handleCloseModal: () => void;
-  handleAIAssist: () => Promise<void>;
 };
 
 const NoteModal: React.FC<NoteModalProps> = ({
@@ -45,11 +45,63 @@ const NoteModal: React.FC<NoteModalProps> = ({
   handleCreateNote,
   handleEditNote,
   handleCloseModal,
-  handleAIAssist,
 }) => {
+  const [isAiLoading, setIsAiLoading] = useState(false);
+
+  const handleAIAssistClick = async () => {
+    if (!newNote.content.trim()) return;
+
+    setIsAiLoading(true);
+
+    try {
+      console.log("AI Assist clicked");
+      const response = await axios.post(
+        "/api/chat",
+        {
+          input: newNote.content,
+          title: currentNote.title,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      const data = response.data;
+      console.log("AI Response:", data);
+
+      // Update the note content with the structured version
+      if (data.structuredContent) {
+        setNewNote({ ...newNote, content: data.structuredContent });
+      }
+
+      // Create a new updated note object
+      const updatedNote = { ...currentNote };
+
+      // Update tags based on AI response
+      if (data.suggestedTags) {
+        updatedNote.tags = data.suggestedTags;
+      }
+
+      // If there is no title, update with the AI-suggested title
+      if (!currentNote.title.trim() && data.suggestedTitle) {
+        updatedNote.title = data.suggestedTitle;
+      }
+
+      setCurrentNote(updatedNote);
+    } catch (error) {
+      console.error("AI Assist error:", error);
+    } finally {
+      setIsAiLoading(false);
+    }
+  };
+
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-      <DialogContent className="sm:max-w-[725px]">
+      <DialogContent
+        className={`sm:max-w-[725px] transition-all duration-300 ${
+          isAiLoading ? "blur-sm pointer-events-none" : ""
+        }`}
+      >
         <DialogHeader>
           <DialogTitle>
             {isEditing ? "Edit Note" : "Create New Note"}
@@ -104,7 +156,8 @@ const NoteModal: React.FC<NoteModalProps> = ({
         <DialogFooter className="flex items-center justify-between sm:justify-between">
           <Button
             variant="secondary"
-            onClick={handleAIAssist}
+            onClick={handleAIAssistClick}
+            disabled={!newNote.content.trim() || isAiLoading}
             className="gap-2"
           >
             <Sparkles className="h-4 w-4" />
@@ -116,9 +169,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
             </Button>
             <Button
               onClick={isEditing ? handleEditNote : handleCreateNote}
-              disabled={
-                !currentNote.title.trim() || !currentNote.content.trim()
-              }
+              disabled={!currentNote.title.trim() || !newNote.content.trim()}
             >
               {isEditing ? "Save Changes" : "Create Note"}
             </Button>

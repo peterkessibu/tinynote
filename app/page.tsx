@@ -146,7 +146,7 @@ export default function NotesApp() {
         handleOpenEditModal={handleOpenEditModal}
       />
 
-      <NoteModal
+        <NoteModal
         isModalOpen={isModalOpen}
         isEditing={isEditing}
         currentNote={currentNote}

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { StickyNote } from "lucide-react";
+import Link from "next/link";
 
 export default function SiteHeader() {
   return (
@@ -11,12 +12,14 @@ export default function SiteHeader() {
 
         {/* Center logo */}
         <div className="flex flex-1 items-center justify-center">
-          <div className="flex items-center space-x-2">
-            <StickyNote className="h-6 w-6" />
-            <span className="font-bold text-xl hidden sm:inline-block">
-              NoteFlow
-            </span>
-          </div>
+          <Link href={"/"}>
+            <div className="flex items-center space-x-2 text-white">
+              <StickyNote className="h-6 w-6" />
+              <span className="font-bold text-xl hidden sm:inline-block">
+                NoteFlow
+              </span>
+            </div>
+          </Link>
         </div>
 
         {/* Right section - auth button */}

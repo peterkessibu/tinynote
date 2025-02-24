@@ -126,7 +126,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
           </div>
           <div className="grid gap-2">
             <Label htmlFor="content">Content</Label>
-            <div className="border rounded-md p-2">
+            <div>
               <Textarea
                 id="content"
                 placeholder="Write your note here..."
@@ -155,13 +155,12 @@ const NoteModal: React.FC<NoteModalProps> = ({
         </div>
         <DialogFooter className="flex items-center justify-between sm:justify-between">
           <Button
-            variant="secondary"
             onClick={handleAIAssistClick}
             disabled={!newNote.content.trim() || isAiLoading}
-            className="gap-2"
+            className="gap-2 px-4 py-2 text-xs bg-gradient-to-tr from-blue-700 via-purple-700 to-pink-700"
           >
             <Sparkles className="h-4 w-4" />
-            AI Assist
+            <span className="hidden md:block">AI Assist</span>
           </Button>
           <div className="flex gap-2">
             <Button variant="outline" onClick={handleCloseModal}>

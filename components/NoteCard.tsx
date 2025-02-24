@@ -93,7 +93,7 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, formatDate, onEdit }) => {
         <Button
           variant="ghost"
           size="icon"
-          className="absolute right-4 top-4 opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute right-4 top-4 md:opacity-0 group-hover:opacity-100 transition-opacity"
           onClick={() => onEdit(note)}
         >
           <Pencil className="h-4 w-4" />

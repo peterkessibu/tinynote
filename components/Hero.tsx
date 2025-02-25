@@ -50,10 +50,10 @@ export default function Hero() {
             <Link href={"/notes"}>
               <Button
                 size="lg"
-                className="bg-purple-600 hover:bg-purple-700 text-white px-8"
+                className="bg-purple-600 outline-blue-300 outline outline-offset-4 rounded-xl hover:bg-purple-700 hover:scale-[1.03] transition-all duration-300 text-white px-8 active:scale-[1.01]"
               >
-                <FileText className="mr-2 h-5 w-5" />
-                Get Started
+                <FileText className="h-5 w-5" />
+                <span className="text-base">Get Started</span>
               </Button>
             </Link>
           </motion.div>

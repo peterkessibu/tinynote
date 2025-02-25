@@ -87,7 +87,7 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, formatDate, onEdit }) => {
   return (
     <Card
       key={note.id}
-      className={`hover:shadow-lg group flex flex-col h-full border-2 hover:scale-[1.03] transition-all duration-300 ${borderColor}`}
+      className={`hover:shadow-lg group flex flex-col h-full border-2 hover:scale-[1.03] transition-all duration-300 bg-[#0a1b38] ${borderColor}`}
     >
       <CardHeader className="relative">
         <Button
@@ -106,14 +106,18 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, formatDate, onEdit }) => {
         {/* Content section */}
         <div className="flex-grow">
           <div
-            className="text-sm text-muted-foreground line-clamp-3 mb-3 prose-sm"
+            className="text-sm text-muted-foreground line-clamp-3 mb-3 prose-sm text-gray-200"
             dangerouslySetInnerHTML={{ __html: note.content }}
           />
         </div>
         {/* Tags section */}
         <div className="flex flex-wrap gap-2 mt-auto">
           {note.tags.map((tag) => (
-            <Badge key={tag} variant="secondary" className={tagColors[tag]}>
+            <Badge
+              key={tag}
+              variant="secondary"
+              className={`${tagColors[tag]} rounded-full px-2`}
+            >
               {tag}
             </Badge>
           ))}

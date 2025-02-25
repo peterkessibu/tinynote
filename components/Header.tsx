@@ -16,7 +16,7 @@ export default function SiteHeader() {
             <div className="flex items-center space-x-2 text-white">
               <StickyNote className="h-6 w-6" />
               <span className="font-bold text-xl hidden sm:inline-block">
-                NoteFlow
+                tiny-Notes
               </span>
             </div>
           </Link>

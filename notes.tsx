@@ -47,7 +47,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
   }
 
   return (
-    <div className="flex gap-2 mb-2">
+    <div className="mb-2 flex gap-2">
       <Toggle
         size="sm"
         pressed={editor.isActive("bold")}
@@ -201,7 +201,7 @@ export default function NotesApp() {
   };
 
   return (
-    <div className="container mx-auto p-4 space-y-4">
+    <div className="container mx-auto space-y-4 p-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">My Notes</h1>
         <Button
@@ -216,17 +216,17 @@ export default function NotesApp() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {notes.map((note) => (
           <Card
             key={note.id}
-            className="hover:shadow-lg transition-shadow group"
+            className="group transition-shadow hover:shadow-lg"
           >
             <CardHeader className="relative">
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute right-4 top-4 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute right-4 top-4 opacity-0 transition-opacity group-hover:opacity-100"
                 onClick={() => handleOpenEditModal(note)}
               >
                 <Pencil className="h-4 w-4" />
@@ -239,7 +239,7 @@ export default function NotesApp() {
             </CardHeader>
             <CardContent>
               <div
-                className="text-sm text-muted-foreground line-clamp-3 mb-3 prose-sm"
+                className="prose-sm mb-3 line-clamp-3 text-sm text-muted-foreground"
                 dangerouslySetInnerHTML={{ __html: note.content }}
               />
               <div className="flex flex-wrap gap-2">
@@ -280,11 +280,11 @@ export default function NotesApp() {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="content">Content</Label>
-              <div className="border rounded-md p-2">
+              <div className="rounded-md border p-2">
                 <MenuBar editor={editor} />
                 <EditorContent
                   editor={editor}
-                  className="min-h-[150px] prose prose-sm max-w-none"
+                  className="prose prose-sm min-h-[150px] max-w-none"
                 />
               </div>
             </div>

@@ -119,12 +119,12 @@ export default function NotesApp() {
   };
 
   return (
-    <div className="relative mx-auto p-4 flex flex-col space-y-4">
+    <div className="relative mx-auto flex flex-col space-y-4 p-4">
       <div className="mx-8">
-        <div className="flex items-center justify-between my-4">
+        <div className="my-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold">My Notes</h1>
           <Button
-            className="gap-2 bg-blue-700 hover:scale-[1.02] rounded-xl py-2 px-4 text-white hover:bg-blue-800 active:border"
+            className="gap-2 rounded-xl bg-blue-700 px-4 py-2 text-white hover:scale-[1.02] hover:bg-blue-800 active:border"
             onClick={() => {
               setIsEditing(false);
               setIsModalOpen(true);

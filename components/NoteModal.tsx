@@ -98,8 +98,8 @@ const NoteModal: React.FC<NoteModalProps> = ({
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
       <DialogContent
-        className={`sm:max-w-[725px] transition-all duration-300 ${
-          isAiLoading ? "blur-sm pointer-events-none" : ""
+        className={`transition-all duration-300 sm:max-w-[725px] ${
+          isAiLoading ? "pointer-events-none blur-sm" : ""
         }`}
       >
         <DialogHeader>
@@ -157,7 +157,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
           <Button
             onClick={handleAIAssistClick}
             disabled={!newNote.content.trim() || isAiLoading}
-            className="gap-2 px-4 py-2 text-xs bg-gradient-to-tr from-blue-700 via-purple-700 to-pink-700"
+            className="gap-2 bg-gradient-to-tr from-blue-700 via-purple-700 to-pink-700 px-4 py-2 text-xs"
           >
             <Sparkles className="h-4 w-4" />
             <span className="hidden md:block">AI Assist</span>

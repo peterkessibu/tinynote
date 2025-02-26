@@ -9,22 +9,22 @@ import { RoboAnimation } from "@/components/robo-animation";
 
 export default function Hero() {
   return (
-    <div className="relative min-h-[calc(100vh-76px)] flex items-center">
+    <div className="relative flex min-h-[calc(100vh-76px)] items-center">
       {/* Floating papers background */}
       <div className="absolute inset-0 overflow-hidden">
-        <FloatingPaper count={9} />
+        <FloatingPaper count={6} />
       </div>
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
+      <div className="container relative z-10 mx-auto px-6">
+        <div className="mx-auto max-w-4xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
+            <h1 className="mb-6 text-4xl font-bold text-white md:text-6xl lg:text-7xl">
               Transform Your Notes with
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
+              <span className="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
                 {" "}
                 AI Power
               </span>
@@ -35,7 +35,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-gray-400 text-xl mb-8 max-w-2xl mx-auto"
+            className="mx-auto mb-8 max-w-2xl text-xl text-gray-400"
           >
             Write down your notes, and our AI will transform them into clear
             summaries, engaging presentations, and interactive insights.
@@ -45,12 +45,12 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            className="flex flex-col items-center justify-center gap-4 sm:flex-row"
           >
             <Link href={"/notes"}>
               <Button
                 size="lg"
-                className="bg-purple-600 outline-blue-300 outline outline-offset-4 rounded-xl hover:bg-purple-700 hover:scale-[1.03] transition-all duration-300 text-white px-8 active:scale-[1.01]"
+                className="rounded-xl bg-purple-600 px-8 text-white outline outline-offset-4 outline-blue-300 transition-all duration-300 hover:scale-[1.03] hover:bg-purple-700 active:scale-[1.01]"
               >
                 <FileText className="h-5 w-5" />
                 <span className="text-base">Get Started</span>
@@ -61,7 +61,7 @@ export default function Hero() {
       </div>
 
       {/* Animated robot */}
-      <div className="absolute bottom-0 right-0 w-96 h-96">
+      <div className="absolute bottom-0 right-0 h-96 w-96">
         <RoboAnimation />
       </div>
     </div>

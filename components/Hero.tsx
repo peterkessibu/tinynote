@@ -24,7 +24,7 @@ export default function Hero() {
           >
             <h1 className="mb-6 text-4xl font-bold text-white md:text-6xl lg:text-7xl">
               Transform Your Notes with
-              <span className="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 {" "}
                 AI Power
               </span>

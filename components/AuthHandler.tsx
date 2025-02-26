@@ -42,26 +42,26 @@ const AuthHandler = ({ handleClose }: AuthHandlerProps) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
       onClick={handleClose}
     >
       <Card
-        className="w-full max-w-md relative"
+        className="relative w-full max-w-md"
         onClick={(e) => e.stopPropagation()}
       >
         <Button
-          className="absolute top-2 right-2"
+          className="absolute right-2 top-2"
           onClick={handleClose}
           variant="destructive"
         >
           <X size={24} />
         </Button>
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">
+          <CardTitle className="text-center text-2xl font-bold">
             Sign In
           </CardTitle>
           {error && (
-            <p className="text-red-500 text-sm text-center mt-2">{error}</p>
+            <p className="mt-2 text-center text-sm text-red-500">{error}</p>
           )}
         </CardHeader>
         <CardContent className="space-y-4">

@@ -87,13 +87,13 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, formatDate, onEdit }) => {
   return (
     <Card
       key={note.id}
-      className={`hover:shadow-lg group flex flex-col h-full border-2 hover:scale-[1.03] transition-all duration-300 ${borderColor}`}
+      className={`group flex h-full flex-col border-2 bg-[#0a1b38] transition-all duration-300 hover:scale-[1.03] hover:shadow-lg ${borderColor}`}
     >
       <CardHeader className="relative">
         <Button
           variant="ghost"
           size="icon"
-          className="absolute right-4 top-4 md:opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute right-4 top-4 transition-opacity group-hover:opacity-100 md:opacity-0"
           onClick={() => onEdit(note)}
         >
           <Pencil className="h-4 w-4" />
@@ -102,18 +102,22 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, formatDate, onEdit }) => {
         <CardTitle>{note.title}</CardTitle>
         <CardDescription>Created {formatDate(note.createdAt)}</CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col flex-grow">
+      <CardContent className="flex flex-grow flex-col">
         {/* Content section */}
         <div className="flex-grow">
           <div
-            className="text-sm text-muted-foreground line-clamp-3 mb-3 prose-sm"
+            className="prose-sm mb-3 line-clamp-3 text-sm text-gray-200 text-muted-foreground"
             dangerouslySetInnerHTML={{ __html: note.content }}
           />
         </div>
         {/* Tags section */}
-        <div className="flex flex-wrap gap-2 mt-auto">
+        <div className="mt-auto flex flex-wrap gap-2">
           {note.tags.map((tag) => (
-            <Badge key={tag} variant="secondary" className={tagColors[tag]}>
+            <Badge
+              key={tag}
+              variant="secondary"
+              className={`${tagColors[tag]} rounded-full px-2`}
+            >
               {tag}
             </Badge>
           ))}

@@ -8,7 +8,7 @@ import { signInWithPopup, UserCredential } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 
 interface AuthHandlerProps {
-  handleClose: () => void;
+  handleClose: (success?: boolean) => void;
 }
 
 const AuthHandler = ({ handleClose }: AuthHandlerProps) => {
@@ -16,7 +16,7 @@ const AuthHandler = ({ handleClose }: AuthHandlerProps) => {
 
   const handleAuthSuccess = async (result: UserCredential) => {
     console.log("Authenticated user", result.user);
-    handleClose();
+    handleClose(true); // Pass true to indicate successful authentication
   };
 
   const signInWithGoogle = async () => {
@@ -43,7 +43,7 @@ const AuthHandler = ({ handleClose }: AuthHandlerProps) => {
   return (
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-      onClick={handleClose}
+      onClick={() => handleClose(false)}
     >
       <Card
         className="relative w-full max-w-md"
@@ -51,7 +51,7 @@ const AuthHandler = ({ handleClose }: AuthHandlerProps) => {
       >
         <Button
           className="absolute right-2 top-2"
-          onClick={handleClose}
+          onClick={() => handleClose(false)}
           variant="destructive"
         >
           <X size={24} />

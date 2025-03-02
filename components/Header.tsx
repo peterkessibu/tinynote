@@ -45,7 +45,9 @@ export default function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b-4 border-purple-900/50 bg-black/80 shadow-sm backdrop-blur-sm">
       <div className="flex h-14 items-center px-4">
-        <div className="flex flex-1 justify-start"></div>
+        <div className="flex flex-1 justify-start">
+          {/* Left section - empty */}
+        </div>
 
         {/* Center logo */}
         <div className="flex items-center justify-center">
@@ -59,12 +61,12 @@ export default function SiteHeader() {
           </Link>
         </div>
 
-        <div className="flex flex-1 justify-end">
+        <div className="flex flex-1 justify-end mr-8">
           {/* Right section - user profile or empty */}
           {!loading && user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="relative flex h-9 w-9 overflow-hidden rounded-full ring-2 ring-purple-500 transition-all hover:ring-4">
+                <button className="relative flex size-9 overflow-hidden rounded-full ring-2 ring-purple-500 transition-all hover:ring-4">
                   {user.photoURL ? (
                     <Image
                       src={user.photoURL}
@@ -82,7 +84,7 @@ export default function SiteHeader() {
                   )}
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48 p-4 rounded-lg">
+              <DropdownMenuContent align="end" className="w-48 rounded-lg p-4">
                 <div className="px-2 py-1.5 text-sm font-medium text-white">
                   {user.displayName || user.email}
                 </div>

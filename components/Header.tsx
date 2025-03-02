@@ -82,8 +82,8 @@ export default function SiteHeader() {
                   )}
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <div className="px-2 py-1.5 text-sm font-medium">
+              <DropdownMenuContent align="end" className="w-48 p-4 rounded-lg">
+                <div className="px-2 py-1.5 text-sm font-medium text-white">
                   {user.displayName || user.email}
                 </div>
                 <DropdownMenuItem

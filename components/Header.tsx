@@ -61,7 +61,7 @@ export default function SiteHeader() {
           </Link>
         </div>
 
-        <div className="flex flex-1 justify-end mr-8">
+        <div className="mr-8 flex flex-1 justify-end">
           {/* Right section - user profile or empty */}
           {!loading && user && (
             <DropdownMenu>

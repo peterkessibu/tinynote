@@ -5,18 +5,39 @@ import { motion } from "framer-motion";
 import { FileText } from "lucide-react";
 import { FloatingPaper } from "@/components/Floating-paper";
 import { RoboAnimation } from "@/components/robo-animation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AuthHandler from "@/components/AuthHandler";
 import { useRouter } from "next/navigation";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/app/firebase";
 
 export default function Hero() {
   const [showAuth, setShowAuth] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsAuthenticated(!!user);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleAuthClose = (authenticated = false) => {
     setShowAuth(false);
     if (authenticated) {
       router.push("/notes");
+    }
+  };
+
+  const handleGetStarted = () => {
+    if (isAuthenticated) {
+      // If already authenticated, go directly to notes page
+      router.push("/notes");
+    } else {
+      // Otherwise show auth popup
+      setShowAuth(true);
     }
   };
 
@@ -62,7 +83,7 @@ export default function Hero() {
             <Button
               size="lg"
               className="rounded-xl bg-purple-600 px-8 text-white outline outline-offset-4 outline-blue-300 transition-all duration-300 hover:scale-[1.03] hover:bg-purple-700 active:scale-[1.01]"
-              onClick={() => setShowAuth(true)}
+              onClick={handleGetStarted}
             >
               <FileText className="h-5 w-5" />
               <span className="text-base">Get Started</span>

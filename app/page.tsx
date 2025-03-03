@@ -19,7 +19,6 @@ export default function Home() {
     return <LoadingPage />;
   }
 
-  // Return actual content once loaded
   return (
     <div className="bg-grid-white/[0.02] min-h-screen bg-black/[0.96] antialiased">
       <Header />

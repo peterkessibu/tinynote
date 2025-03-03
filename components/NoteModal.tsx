@@ -153,25 +153,29 @@ const NoteModal: React.FC<NoteModalProps> = ({
             />
           </div>
         </div>
-        <DialogFooter className="flex items-center justify-between sm:justify-between">
-          <Button
-            onClick={handleAIAssistClick}
-            disabled={!newNote.content.trim() || isAiLoading}
-            className="gap-2 bg-gradient-to-tr from-blue-700 via-purple-700 to-pink-700 px-4 py-2 text-xs"
-          >
-            <Sparkles className="h-4 w-4" />
-            <span className="hidden md:block">AI Assist</span>
-          </Button>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={handleCloseModal}>
-              Cancel
-            </Button>
+        <DialogFooter className="flex w-full flex-row items-center justify-between">
+          <div className="flex w-full items-center justify-between">
             <Button
-              onClick={isEditing ? handleEditNote : handleCreateNote}
-              disabled={!currentNote.title.trim() || !newNote.content.trim()}
+              size="lg"
+              onClick={handleAIAssistClick}
+              disabled={!newNote.content.trim() || isAiLoading}
+              className="gap-2 rounded-full bg-gradient-to-tr from-blue-700 via-purple-700 to-pink-700 p-4 text-xs text-white md:rounded-none md:px-4 md:py-2"
             >
-              {isEditing ? "Save Changes" : "Create Note"}
+              <Sparkles className="size-6" />
+              <span className="hidden md:block">AI Assist</span>
             </Button>
+
+            <div className="flex gap-2 sm:ml-auto">
+              <Button variant="outline" onClick={handleCloseModal}>
+                Cancel
+              </Button>
+              <Button
+                onClick={isEditing ? handleEditNote : handleCreateNote}
+                disabled={!currentNote.title.trim() || !newNote.content.trim()}
+              >
+                {isEditing ? "Save Changes" : "Create Note"}
+              </Button>
+            </div>
           </div>
         </DialogFooter>
       </DialogContent>

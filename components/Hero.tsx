@@ -55,7 +55,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="mb-6 text-4xl font-bold text-white md:text-6xl lg:text-7xl">
+            <h1 className="mb-4 text-4xl font-bold text-white md:text-6xl lg:text-7xl">
               Transform Your Notes with
               <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 {" "}
@@ -78,7 +78,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-col items-center justify-center gap-4 sm:flex-row"
+            className="mb-4 flex flex-col items-center justify-center gap-4 sm:flex-row"
           >
             <Button
               size="lg"
@@ -93,7 +93,7 @@ export default function Hero() {
       </div>
 
       {/* Animated robot */}
-      <div className="absolute bottom-0 right-0 h-96 w-96">
+      <div className="absolute bottom-2 right-0 h-96 w-96 md:top-3">
         <RoboAnimation />
       </div>
 

@@ -46,7 +46,7 @@ const AuthHandler = ({ handleClose }: AuthHandlerProps) => {
       onClick={() => handleClose(false)}
     >
       <Card
-        className="relative w-full max-w-md"
+        className="relative mx-4 w-full max-w-md"
         onClick={(e) => e.stopPropagation()}
       >
         <Button

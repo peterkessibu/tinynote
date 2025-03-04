@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Pencil, Trash2} from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { Note } from "./NoteCard";
 import ReactMarkdown from "react-markdown";
 
@@ -59,10 +59,9 @@ const NoteViewModal: React.FC<NoteViewModalProps> = ({
               >
                 <Trash2 className="size-5" />
               </Button>
-              
             </div>
           </div>
-          <p className="text-sm text-gray-400 italic">
+          <p className="text-sm italic text-gray-400">
             Created {formatDate(note.createdAt)}
           </p>
         </DialogHeader>

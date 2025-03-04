@@ -70,7 +70,6 @@ const NoteModal: React.FC<NoteModalProps> = ({
     setPlainContent(stripMarkdown(newNote.content));
   }, [newNote.content]);
 
-
   const handlePlainTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPlainContent(e.target.value);
     // Also update the original markdown content
@@ -156,13 +155,13 @@ const NoteModal: React.FC<NoteModalProps> = ({
           <div className="grid gap-2">
             <Label htmlFor="content">Content</Label>
             <div>
-                <Textarea
-                  id="content"
-                  placeholder="Write your note here..."
-                  className="min-h-[150px]"
-                  value={plainContent}
-                  onChange={handlePlainTextChange}
-                />
+              <Textarea
+                id="content"
+                placeholder="Write your note here..."
+                className="min-h-[150px]"
+                value={plainContent}
+                onChange={handlePlainTextChange}
+              />
             </div>
           </div>
           <div className="grid gap-2">

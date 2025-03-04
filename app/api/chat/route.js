@@ -26,20 +26,16 @@ export async function POST(request) {
       );
     }
 
-    const prompt = `
-Analyze the following note content:
--------------------
-${input}
--------------------
-${title ? "Existing title: " + title : "No title provided."}
-
-Return a JSON with:
- - "structuredContent": A refined version of the content.
- - "suggestedTags": Not more than 4 relevant tags as a comma-separated string.
- - "suggestedTitle": A concise title (if missing).
-
-Ensure a valid JSON response.
-`;
+    const prompt = `Analyze the following note content:
+  -------------------
+  ${input}
+  -------------------
+  ${title ? "Existing title: " + title : "No title provided."}
+  Return a JSON with:
+   - "structuredContent": A refined version of the content WITH MARKDOWN FORMATTING (use headings, lists, emphasis, etc. where appropriate).
+   - "suggestedTags": Not more than 5 relevant tags as a comma-separated string.
+   - "suggestedTitle": A concise title (if missing).
+  Ensure a valid JSON response with proper markdown formatting.`;
 
     const chatSession = model.startChat({
       generationConfig,
@@ -62,7 +58,7 @@ Ensure a valid JSON response.
       );
     }
 
-    const textResponse = await result.response.text();
+    const textResponse = result.response.text();
     console.log("Raw Gemini Response:", textResponse); // Debugging
 
     let analysis;
@@ -92,12 +88,13 @@ Ensure a valid JSON response.
         analysis = {
           structuredContent: structuredContentMatch
             ? structuredContentMatch[1]
+                .replace(/\\n/g, "\n")
+                .replace(/\\"/g, '"')
             : input,
           suggestedTags: suggestedTagsMatch ? suggestedTagsMatch[1] : "",
           suggestedTitle: suggestedTitleMatch ? suggestedTitleMatch[1] : "",
         };
       } catch (error) {
-        // If all else fails, return the original input with error message
         console.log(error);
         return NextResponse.json({
           structuredContent: input,

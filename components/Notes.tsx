@@ -60,7 +60,7 @@ export default function NotesApp() {
       // Add document to the user's notes collection
       await addDoc(collection(db, `users/${auth.currentUser.uid}/notes`), {
         title: currentNote.title || "Untitled Note",
-        content: currentNote.content,
+        content: newNote.content,
         tags: formattedTags,
         createdAt: serverTimestamp(),
       });
@@ -73,9 +73,6 @@ export default function NotesApp() {
       setNewNote({ title: "", content: "", tags: "" });
     } catch (error) {
       console.error("Error creating note:", error);
-      toast.error("Error creating note", {
-        description: "There was a problem saving your note",
-      });
     } finally {
       setIsProcessing(false);
     }
@@ -162,6 +159,12 @@ export default function NotesApp() {
       content: note.content,
       tags: note.tags.join(", "),
     });
+
+    setNewNote({
+      title: note.title,
+      content: note.content,
+      tags: note.tags.join(", "),
+    });
     setIsEditing(true);
     setIsModalOpen(true);
   };
@@ -169,6 +172,11 @@ export default function NotesApp() {
   const handleNewNoteClick = () => {
     setIsEditing(false);
     setCurrentNote({ id: "", title: "", content: "", tags: "" });
+    setNewNote({
+      title: "",
+      content: "",
+      tags: "",
+    });
     setIsModalOpen(true);
   };
 
@@ -192,7 +200,7 @@ export default function NotesApp() {
       <div className="mx-8">
         <div className="my-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold">My Notes</h1>
-          {currentNote.title.length > 0 && (
+          {NoteList.length > 0 && (
             <Button
               className="gap-2 rounded-xl bg-blue-700 px-4 py-2 text-white hover:scale-[1.02] hover:bg-blue-800 active:border"
               onClick={handleNewNoteClick}

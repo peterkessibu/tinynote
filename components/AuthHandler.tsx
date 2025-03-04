@@ -66,7 +66,7 @@ const AuthHandler = ({ handleClose }: AuthHandlerProps) => {
         </CardHeader>
         <CardContent className="space-y-4">
           <Button
-            className="w-full"
+            className="w-full rounded-lg hover:scale-[1.03] active:border-blue-600"
             variant="outline"
             onClick={signInWithGoogle}
           >

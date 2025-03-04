@@ -152,8 +152,9 @@ const NoteList: React.FC<NoteListProps> = ({
 
   if (loading) {
     return (
-      <div className="flex h-64 w-full items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+      <div className="flex flex-col h-64 w-full items-center justify-center">
+        <Loader2 className="size-16 animate-spin text-blue-500" />
+        <span className="text-xl">Fetching Notes...</span>
       </div>
     );
   }

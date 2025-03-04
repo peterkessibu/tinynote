@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export type Note = {
@@ -22,6 +22,17 @@ type NoteCardProps = {
   note: Note;
   formatDate: (date: Date) => string;
   onEdit: (note: Note) => void;
+  onDelete?: (noteId: string) => void; // Add delete handler prop
+};
+
+// Function to get a color based on string hash
+const getColorFromString = (str: string, colorList: string[]): string => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return colorList[Math.abs(hash) % colorList.length];
 };
 
 // Predefined color lists
@@ -49,40 +60,35 @@ const borderColors = [
   "border-orange-500",
 ];
 
-// Function to get a color based on note id
-const getPersistentColor = (id: string, list: string[]) => {
-  const storedColors = JSON.parse(localStorage.getItem("noteColors") || "{}");
-
-  if (storedColors[id]) return storedColors[id];
-
-  const newColor = list[Math.floor(Math.random() * list.length)];
-  storedColors[id] = newColor;
-
-  localStorage.setItem("noteColors", JSON.stringify(storedColors));
-  return newColor;
-};
-
-const NoteCard: React.FC<NoteCardProps> = ({ note, formatDate, onEdit }) => {
+const NoteCard: React.FC<NoteCardProps> = ({
+  note,
+  formatDate,
+  onEdit,
+  onDelete,
+}) => {
   const [borderColor, setBorderColor] = useState("");
   const [tagColors, setTagColors] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    setBorderColor(getPersistentColor(note.id, borderColors));
+    // Get consistent border color based on note ID
+    setBorderColor(getColorFromString(note.id, borderColors));
 
-    // Generate persistent colors for each tag
-    const storedTagColors = JSON.parse(
-      localStorage.getItem("tagColors") || "{}",
-    );
-    if (!storedTagColors[note.id]) {
-      storedTagColors[note.id] = {};
-      note.tags.forEach((tag) => {
-        storedTagColors[note.id][tag] = getPersistentColor(tag, colors);
-      });
-      localStorage.setItem("tagColors", JSON.stringify(storedTagColors));
-    }
-
-    setTagColors(storedTagColors[note.id]);
+    // Get consistent colors for tags
+    const newTagColors: Record<string, string> = {};
+    note.tags.forEach((tag) => {
+      newTagColors[tag] = getColorFromString(tag, colors);
+    });
+    setTagColors(newTagColors);
   }, [note.id, note.tags]);
+
+  // Handle delete confirmation
+  const handleDeleteClick = () => {
+    {
+      if (onDelete) {
+        onDelete(note.id);
+      }
+    }
+  };
 
   return (
     <Card
@@ -90,25 +96,33 @@ const NoteCard: React.FC<NoteCardProps> = ({ note, formatDate, onEdit }) => {
       className={`group flex h-full flex-col border-2 bg-[#0a1b38] transition-all duration-300 hover:scale-[1.03] hover:shadow-lg ${borderColor}`}
     >
       <CardHeader className="relative">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute right-4 top-4 rounded-full transition-opacity group-hover:opacity-100 md:opacity-0"
-          onClick={() => onEdit(note)}
-        >
-          <Pencil className="h-4 w-4" />
-          <span className="sr-only">Edit note</span>
-        </Button>
+        <div className="absolute right-4 top-4 flex gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full transition-opacity group-hover:opacity-100 md:opacity-0"
+            onClick={() => onEdit(note)}
+          >
+            <Pencil className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full text-red-500 transition-opacity group-hover:opacity-100 md:opacity-0"
+            onClick={handleDeleteClick}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
         <CardTitle>{note.title}</CardTitle>
         <CardDescription>Created {formatDate(note.createdAt)}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-grow flex-col">
         {/* Content section */}
         <div className="flex-grow">
-          <div
-            className="prose-sm mb-3 line-clamp-3 text-sm text-gray-200 text-muted-foreground"
-            dangerouslySetInnerHTML={{ __html: note.content }}
-          />
+          <div className="prose-sm mb-3 line-clamp-3 text-sm text-gray-200 text-muted-foreground">
+            {note.content}
+          </div>
         </div>
         {/* Tags section */}
         <div className="mt-auto flex flex-wrap gap-2">

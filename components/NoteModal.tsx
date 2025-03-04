@@ -172,6 +172,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
               <Button
                 onClick={isEditing ? handleEditNote : handleCreateNote}
                 disabled={!currentNote.title.trim() || !newNote.content.trim()}
+                className="text-white"
               >
                 {isEditing ? "Save Changes" : "Create Note"}
               </Button>

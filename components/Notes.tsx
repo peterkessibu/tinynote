@@ -6,36 +6,24 @@ import { PlusCircle } from "lucide-react";
 import NoteList from "@/components/NoteList";
 import NoteModal, { NoteForm } from "@/components/NoteModal";
 import { Note } from "@/components/NoteCard";
+import { db } from "@/app/firebase";
+import { getAuth } from "firebase/auth";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  serverTimestamp,
+} from "firebase/firestore";
+import { toast } from "sonner";
 
 export default function NotesApp() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [, setIsProcessing] = useState(false);
 
-  const [notes, setNotes] = useState<Note[]>([
-    {
-      id: "1",
-      title: "Shopping List",
-      content: "MilkEggsBreadFruitsVegetables",
-      tags: ["shopping", "groceries"],
-      createdAt: new Date("2024-02-22"),
-    },
-    {
-      id: "2",
-      title: "Project Ideas",
-      content:
-        "<p>Build a <strong>personal website</strong> with Next.js and Tailwind CSS. Add a blog section and portfolio showcase.</p>",
-      tags: ["coding", "projects"],
-      createdAt: new Date("2024-02-19"),
-    },
-    {
-      id: "3",
-      title: "Meeting Notes",
-      content:
-        "<p><em>Team sync discussion</em> about Q1 goals and upcoming product launches. Follow up with design team about new mockups.</p>",
-      tags: ["work", "meetings"],
-      createdAt: new Date("2024-02-17"),
-    },
-  ]);
+  const auth = getAuth();
 
   const [currentNote, setCurrentNote] = useState<NoteForm>({
     id: "",
@@ -43,47 +31,122 @@ export default function NotesApp() {
     content: "",
     tags: "",
   });
+
   const [newNote, setNewNote] = useState<NoteForm>({
     title: "",
     content: "",
     tags: "",
   });
 
-  const handleCreateNote = () => {
-    const note: Note = {
-      id: Date.now().toString(),
-      title: currentNote.title,
-      content: currentNote.content,
-      tags: currentNote.tags
-        .split(",")
-        .map((tag: string) => tag.trim())
-        .filter(Boolean),
-      createdAt: new Date(),
-    };
+  const handleCreateNote = async () => {
+    if (!auth.currentUser) {
+      toast.error("Authentication required", {
+        description: "Please sign in to create notes",
+      });
+      return;
+    }
 
-    setNotes((prev) => [note, ...prev]);
-    handleCloseModal();
-    setNewNote({ title: "", content: "", tags: "" });
-    setIsModalOpen(false);
+    setIsProcessing(true);
+
+    try {
+      // Format tags from comma-separated string to array
+      const formattedTags = currentNote.title
+        ? currentNote.tags
+            .split(",")
+            .map((tag: string) => tag.trim())
+            .filter(Boolean)
+        : [];
+
+      // Add document to the user's notes collection
+      await addDoc(collection(db, `users/${auth.currentUser.uid}/notes`), {
+        title: currentNote.title || "Untitled Note",
+        content: currentNote.content,
+        tags: formattedTags,
+        createdAt: serverTimestamp(),
+      });
+
+      toast.success("Note created", {
+        description: "Your note has been saved to the database",
+      });
+
+      handleCloseModal();
+      setNewNote({ title: "", content: "", tags: "" });
+    } catch (error) {
+      console.error("Error creating note:", error);
+      toast.error("Error creating note", {
+        description: "There was a problem saving your note",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
-  const handleEditNote = () => {
-    setNotes((prev) =>
-      prev.map((note) =>
-        note.id === currentNote.id
-          ? {
-              ...note,
-              title: currentNote.title,
-              content: currentNote.content,
-              tags: currentNote.tags
-                .split(",")
-                .map((tag: string) => tag.trim())
-                .filter(Boolean),
-            }
-          : note,
-      ),
-    );
-    handleCloseModal();
+  const handleEditNote = async () => {
+    if (!auth.currentUser || !currentNote.id) {
+      toast.error("Error updating note", {
+        description: "Authentication required or invalid note ID",
+      });
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      // Format tags from comma-separated string to array
+      const formattedTags = currentNote.tags
+        .split(",")
+        .map((tag: string) => tag.trim())
+        .filter(Boolean);
+
+      // Update the document in Firestore
+      const noteRef = doc(
+        db,
+        `users/${auth.currentUser.uid}/notes/${currentNote.id}`,
+      );
+
+      await updateDoc(noteRef, {
+        title: currentNote.title || "Untitled Note",
+        content: currentNote.content,
+        tags: formattedTags,
+        // Don't update createdAt to preserve original creation time
+      });
+
+      toast.success("Note updated", {
+        description: "Your changes have been saved",
+      });
+
+      handleCloseModal();
+    } catch (error) {
+      console.error("Error updating note:", error);
+      toast.error("Error updating note", {
+        description: "There was a problem saving your changes",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleDeleteNote = async (noteId: string) => {
+    if (!auth.currentUser) {
+      toast.error("Note Deleted", {
+        description: "Note has been successfully deleted",
+      });
+      return;
+    }
+
+    try {
+      // Delete the document from Firestore
+      await deleteDoc(doc(db, `users/${auth.currentUser.uid}/notes/${noteId}`));
+
+      toast.success("Note deleted", {
+        description: "Your note has been successfully removed",
+      });
+    } catch (error) {
+      console.error("Error deleting note:", error);
+      toast("Error deleting note", {
+        description: "There was a problem deleting your note",
+      });
+    }
   };
 
   const handleCloseModal = () => {
@@ -103,6 +166,12 @@ export default function NotesApp() {
     setIsModalOpen(true);
   };
 
+  const handleNewNoteClick = () => {
+    setIsEditing(false);
+    setCurrentNote({ id: "", title: "", content: "", tags: "" });
+    setIsModalOpen(true);
+  };
+
   const formatDate = (date: Date) => {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
@@ -110,7 +179,7 @@ export default function NotesApp() {
 
     if (days === 0) return "Today";
     if (days === 1) return "Yesterday";
-    if (days < 7) return `${days} days ago`;
+    if (days > 0 && days < 31) return `${days} days ago`;
     return date.toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
@@ -123,22 +192,22 @@ export default function NotesApp() {
       <div className="mx-8">
         <div className="my-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold">My Notes</h1>
-          <Button
-            className="gap-2 rounded-xl bg-blue-700 px-4 py-2 text-white hover:scale-[1.02] hover:bg-blue-800 active:border"
-            onClick={() => {
-              setIsEditing(false);
-              setIsModalOpen(true);
-            }}
-          >
-            <PlusCircle className="h-4 w-4" />
-            Add Note
-          </Button>
+          {currentNote.title.length > 0 && (
+            <Button
+              className="gap-2 rounded-xl bg-blue-700 px-4 py-2 text-white hover:scale-[1.02] hover:bg-blue-800 active:border"
+              onClick={handleNewNoteClick}
+            >
+              <PlusCircle className="h-4 w-4" />
+              Add Note
+            </Button>
+          )}
         </div>
 
         <NoteList
-          notes={notes}
           formatDate={formatDate}
           handleOpenEditModal={handleOpenEditModal}
+          handleNewNoteClick={handleNewNoteClick}
+          handleDeleteNote={handleDeleteNote}
         />
 
         <NoteModal

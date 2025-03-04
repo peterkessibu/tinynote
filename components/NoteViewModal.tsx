@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Pencil, Trash2, X } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { Note } from "./NoteCard";
 import ReactMarkdown from "react-markdown";
 
@@ -34,67 +34,59 @@ const NoteViewModal: React.FC<NoteViewModalProps> = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent
-        className={`max-h-[90vh] overflow-auto rounded-xl border-2 bg-[#0a1b38] p-0 ${borderColor}`}
-      >
-        <DialogHeader className="p-6 pb-0">
-          <div className="flex items-center justify-between">
-            <DialogTitle className="text-xl font-bold">
-              {note.title}
-            </DialogTitle>
-            <div className="flex gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full"
-                onClick={onEdit}
-              >
-                <Pencil className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full text-red-500"
-                onClick={onDelete}
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full"
-                onClick={onClose}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-          <p className="text-sm text-gray-400">
-            Created {formatDate(note.createdAt)}
-          </p>
-        </DialogHeader>
+        <DialogContent
+            className={`max-h-[90vh] mx-4 overflow-auto rounded-2xl border-2 bg-[#0a1b38] pt-3 ${borderColor}`}
+        >
+            <DialogHeader className="p-0">
+                <div className="flex items-center justify-between">
+                    <DialogTitle className="text-xl font-bold">
+                        {note.title}
+                    </DialogTitle>
+                    <div className="flex gap-2">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="rounded-full"
+                            onClick={onEdit}
+                        >
+                            <Pencil className="size-5" />
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="rounded-full text-red-500"
+                            onClick={onDelete}
+                        >
+                            <Trash2 className="size-5" />
+                        </Button>
+                    </div>
+                </div>
+                <p className="text-sm text-gray-400">
+                    Created {formatDate(note.createdAt)}
+                </p>
+            </DialogHeader>
 
-        <div className="p-6">
-          <div className="prose prose-invert mb-6 flex-grow whitespace-pre-wrap text-gray-200">
-            <ReactMarkdown>{note.content}</ReactMarkdown>
-          </div>
+            <div className="p-2">
+                <div className="prose prose-invert mb-4 flex-grow whitespace-pre-wrap text-gray-200">
+                    <ReactMarkdown>{note.content}</ReactMarkdown>
+                </div>
 
-          {/* Tags section */}
-          {note.tags.length > 0 && (
-            <div className="mt-6 flex flex-wrap gap-2">
-              {note.tags.map((tag) => (
-                <Badge
-                  key={tag}
-                  variant="secondary"
-                  className={`${tagColors[tag]} rounded-full px-2`}
-                >
-                  {tag}
-                </Badge>
-              ))}
+                {/* Tags section */}
+                {note.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                        {note.tags.map((tag) => (
+                            <Badge
+                                key={tag}
+                                variant="secondary"
+                                className={`${tagColors[tag]} rounded-full px-2`}
+                            >
+                                {tag}
+                            </Badge>
+                        ))}
+                    </div>
+                )}
             </div>
-          )}
-        </div>
-      </DialogContent>
+        </DialogContent>
     </Dialog>
   );
 };

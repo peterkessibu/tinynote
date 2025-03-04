@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Dialog,
@@ -47,6 +47,35 @@ const NoteModal: React.FC<NoteModalProps> = ({
   handleCloseModal,
 }) => {
   const [isAiLoading, setIsAiLoading] = useState(false);
+  const [plainContent, setPlainContent] = useState("");
+
+  const stripMarkdown = (markdown: string): string => {
+    if (!markdown) return "";
+
+    return markdown
+      .replace(/#{1,6}\s+/g, "") // Remove headers
+      .replace(/\*\*(.*?)\*\*/g, "$1") // Remove bold
+      .replace(/\*(.*?)\*/g, "$1") // Remove italics
+      .replace(/~~(.*?)~~/g, "$1") // Remove strikethrough
+      .replace(/`(.*?)`/g, "$1") // Remove inline code
+      .replace(/```(?:.*?)\n([\s\S]*?)```/g, "$1") // Remove code blocks
+      .replace(/\[(.*?)\]\((.*?)\)/g, "$1") // Remove links
+      .replace(/^\s*[-*+]\s+/gm, "") // Remove unordered list markers
+      .replace(/^\s*\d+\.\s+/gm, "") // Remove ordered list markers
+      .replace(/^\s*>\s+/gm, "") // Remove blockquotes
+      .replace(/\n{3,}/g, "\n\n"); // Replace multiple newlines with just two
+  };
+
+  useEffect(() => {
+    setPlainContent(stripMarkdown(newNote.content));
+  }, [newNote.content]);
+
+
+  const handlePlainTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setPlainContent(e.target.value);
+    // Also update the original markdown content
+    setNewNote({ ...newNote, content: e.target.value });
+  };
 
   const handleAIAssistClick = async () => {
     if (!newNote.content.trim()) return;
@@ -131,10 +160,8 @@ const NoteModal: React.FC<NoteModalProps> = ({
                   id="content"
                   placeholder="Write your note here..."
                   className="min-h-[150px]"
-                  value={newNote.content}
-                  onChange={(e) =>
-                    setNewNote({ ...newNote, content: e.target.value })
-                  }
+                  value={plainContent}
+                  onChange={handlePlainTextChange}
                 />
             </div>
           </div>

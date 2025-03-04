@@ -93,7 +93,7 @@ export default function Hero() {
       </div>
 
       {/* Animated robot */}
-      <div className="absolute hidden md:block bottom-2 right-0 h-96 w-96 md:top-3">
+      <div className="absolute bottom-2 right-0 hidden h-96 w-96 md:top-3 md:block">
         <RoboAnimation />
       </div>
 

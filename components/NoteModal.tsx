@@ -132,85 +132,87 @@ const NoteModal: React.FC<NoteModalProps> = ({
       >
         {isAiLoading && (
           <div className="absolute inset-0 z-50 flex items-center justify-center bg-background/80">
-        <div className="text-center">
-          <div className="mb-2 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto"></div>
-          <p className="text-lg font-medium text-white">AI is generating content...</p>
-        </div>
+            <div className="text-center">
+              <div className="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+              <p className="text-lg font-medium text-white">
+                AI is generating content...
+              </p>
+            </div>
           </div>
         )}
         <DialogHeader>
           <DialogTitle>
-        {isEditing ? "Edit Note" : "Create New Note"}
+            {isEditing ? "Edit Note" : "Create New Note"}
           </DialogTitle>
           <DialogDescription>
-        {isEditing
-          ? "Edit your note details below."
-          : "Add a new note with a title, content, and optional tags."}
+            {isEditing
+              ? "Edit your note details below."
+              : "Add a new note with a title, content, and optional tags."}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
-        <Label htmlFor="title">Title</Label>
-        <Input
-          id="title"
-          placeholder="Note title"
-          value={currentNote.title}
-          onChange={(e) =>
-            setCurrentNote({ ...currentNote, title: e.target.value })
-          }
-        />
+            <Label htmlFor="title">Title</Label>
+            <Input
+              id="title"
+              placeholder="Note title"
+              value={currentNote.title}
+              onChange={(e) =>
+                setCurrentNote({ ...currentNote, title: e.target.value })
+              }
+            />
           </div>
           <div className="grid gap-2">
-        <Label htmlFor="content">Content</Label>
-        <div>
-          <Textarea
-            id="content"
-            placeholder="Write your note here..."
-            className="min-h-[150px]"
-            value={plainContent}
-            onChange={handlePlainTextChange}
-          />
-        </div>
+            <Label htmlFor="content">Content</Label>
+            <div>
+              <Textarea
+                id="content"
+                placeholder="Write your note here..."
+                className="min-h-[150px]"
+                value={plainContent}
+                onChange={handlePlainTextChange}
+              />
+            </div>
           </div>
           <div className="grid gap-2">
-        <Label htmlFor="tags" className="flex items-center gap-2">
-          <TagIcon className="h-4 w-4" />
-          Tags (comma-separated)
-        </Label>
-        <Input
-          id="tags"
-          placeholder="work, ideas, todo"
-          value={currentNote.tags}
-          onChange={(e) =>
-            setCurrentNote({ ...currentNote, tags: e.target.value })
-          }
-        />
+            <Label htmlFor="tags" className="flex items-center gap-2">
+              <TagIcon className="h-4 w-4" />
+              Tags (comma-separated)
+            </Label>
+            <Input
+              id="tags"
+              placeholder="work, ideas, todo"
+              value={currentNote.tags}
+              onChange={(e) =>
+                setCurrentNote({ ...currentNote, tags: e.target.value })
+              }
+            />
           </div>
         </div>
         <DialogFooter className="flex w-full flex-row items-center justify-between">
           <div className="flex w-full items-center justify-between">
-        <Button
-          size="lg"
-          onClick={handleAIAssistClick}
-          disabled={!newNote.content.trim() || isAiLoading}
-          className="gap-2 rounded-full bg-gradient-to-tr from-blue-700 via-purple-700 to-pink-700 p-4 text-xs text-white md:rounded-none md:px-4 md:py-2"
-        >
-          <Sparkles className="size-6" />
-          <span className="hidden md:block">AI Assist</span>
-        </Button>
+            <Button
+              size="lg"
+              onClick={handleAIAssistClick}
+              disabled={!newNote.content.trim() || isAiLoading}
+              className="gap-2 rounded-full bg-gradient-to-tr from-blue-700 via-purple-700 to-pink-700 p-4 text-xs text-white md:rounded-none md:px-4 md:py-2"
+            >
+              <Sparkles className="size-6" />
+              <span className="hidden md:block">AI Assist</span>
+            </Button>
 
-        <div className="flex gap-2 sm:ml-auto">
-          <Button variant="outline" onClick={handleCloseModal}>
-            Cancel
-          </Button>
-          <Button
-            onClick={isEditing ? handleEditNote : handleCreateNote}
-            disabled={!currentNote.title.trim() || !newNote.content.trim()}
-            className="text-white"
-          >
-            {isEditing ? "Save Changes" : "Create Note"}
-          </Button>
-        </div>
+            <div className="flex gap-2 sm:ml-auto">
+              <Button variant="outline" onClick={handleCloseModal}>
+                Cancel
+              </Button>
+              <Button
+                onClick={isEditing ? handleEditNote : handleCreateNote}
+                disabled={!currentNote.title.trim() || !newNote.content.trim()}
+                className="text-white"
+              >
+                {isEditing ? "Save Changes" : "Create Note"}
+              </Button>
+            </div>
           </div>
         </DialogFooter>
       </DialogContent>

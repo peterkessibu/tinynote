@@ -1,8 +1,6 @@
-"use client";
-
 import { FileText, LogOut } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation"; // Add this import
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { auth } from "@/app/firebase";
 import {
@@ -21,7 +19,7 @@ import {
 export default function SiteHeader() {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter(); // Add router
+  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {

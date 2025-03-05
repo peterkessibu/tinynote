@@ -9,8 +9,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import NoteViewModal from "./NoteViewModal";
+import NoteViewModal from "@/components/NoteViewModal";
 import ReactMarkdown from "react-markdown";
+import { Toaster, toast } from "sonner";
 
 export type Note = {
   id: string;
@@ -87,6 +88,9 @@ const NoteCard: React.FC<NoteCardProps> = ({
   // Handle delete confirmation
   const handleDeleteClick = (e: React.MouseEvent) => {
     // Stop propagation to prevent card click from triggering
+    toast.error(note.title, {
+      description: "Your note has been deleted",
+    });
     e.stopPropagation();
 
     if (onDelete) {
@@ -115,6 +119,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
         onClick={handleCardClick}
       >
         <CardHeader className="relative">
+          {/* Edit and delete buttons */}
           <div className="absolute right-4 top-4 flex gap-2">
             <Button
               variant="ghost"
@@ -158,6 +163,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
             ))}
           </div>
         </CardContent>
+        <Toaster position="bottom-right" richColors />
       </Card>
 
       {/* Expanded View Modal */}

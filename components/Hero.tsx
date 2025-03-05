@@ -8,16 +8,18 @@ import { RoboAnimation } from "@/components/robo-animation";
 import { useState, useEffect } from "react";
 import AuthHandler from "@/components/AuthHandler";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 import { auth } from "@/app/firebase";
 
 export default function Hero() {
   const [showAuth, setShowAuth] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<FirebaseUser | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
       setIsAuthenticated(!!user);
     });
 
@@ -26,15 +28,15 @@ export default function Hero() {
 
   const handleAuthClose = (authenticated = false) => {
     setShowAuth(false);
-    if (authenticated) {
-      router.push("/notes");
+    if (authenticated && user) {
+      router.push(`/${user.uid}/notes`);
     }
   };
 
   const handleGetStarted = () => {
-    if (isAuthenticated) {
+    if (isAuthenticated && user) {
       // If already authenticated, go directly to notes page
-      router.push("/notes");
+      router.push(`/${user.uid}/notes`);
     } else {
       // Otherwise show auth popup
       setShowAuth(true);

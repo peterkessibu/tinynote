@@ -125,20 +125,19 @@ const NoteModal: React.FC<NoteModalProps> = ({
 
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-      <DialogContent
-        className={`transition-all duration-300 sm:max-w-[725px] ${
-          isAiLoading ? "pointer-events-none blur-sm" : ""
-        }`}
-      >
+      <DialogContent className="transition-all duration-300 sm:max-w-[725px]">
         {isAiLoading && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center bg-background/80">
-            <div className="text-center">
-              <div className="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-              <p className="text-lg font-medium text-white">
-                AI is generating content...
-              </p>
+          <>
+            <div className="pointer-events-none absolute inset-0 z-10 bg-background/50 backdrop-blur-sm"></div>
+            <div className="absolute inset-0 z-50 flex items-center justify-center">
+              <div className="text-center">
+                <div className="mx-auto mb-2 size-10 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+                <p className="text-lg font-medium text-white">
+                  AI is refining note...
+                </p>
+              </div>
             </div>
-          </div>
+          </>
         )}
         <DialogHeader>
           <DialogTitle>
@@ -198,7 +197,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
               className="gap-2 rounded-full bg-gradient-to-tr from-blue-700 via-purple-700 to-pink-700 p-4 text-xs text-white md:rounded-none md:px-4 md:py-2"
             >
               <Sparkles className="size-6" />
-              <span className="hidden md:block">AI Assist</span>
+              <span className="text-sm md:text-base">AI Assist</span>
             </Button>
 
             <div className="flex gap-2 sm:ml-auto">

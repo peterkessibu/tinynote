@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
@@ -16,7 +14,7 @@ import {
   doc,
   serverTimestamp,
 } from "firebase/firestore";
-import { toast } from "sonner";
+import { Toaster, toast } from "sonner";
 
 export default function NotesApp() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,7 +64,7 @@ export default function NotesApp() {
       });
 
       toast.success("Note created", {
-        description: "Your note has been saved to the database",
+        description: "Your note has been saved",
       });
 
       handleCloseModal();
@@ -134,10 +132,6 @@ export default function NotesApp() {
     try {
       // Delete the document from Firestore
       await deleteDoc(doc(db, `users/${auth.currentUser.uid}/notes/${noteId}`));
-
-      toast.success("Note deleted", {
-        description: "Your note has been successfully removed",
-      });
     } catch (error) {
       console.error("Error deleting note:", error);
       toast("Error deleting note", {
@@ -200,15 +194,13 @@ export default function NotesApp() {
       <div className="mx-8">
         <div className="my-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold">My Notes</h1>
-          {NoteList.length >= 1 && (
-            <Button
-              className="gap-2 rounded-xl bg-blue-700 px-4 py-2 text-white hover:scale-[1.02] hover:bg-blue-800 active:border"
-              onClick={handleNewNoteClick}
-            >
-              <PlusCircle className="h-4 w-4" />
-              Add Note
-            </Button>
-          )}
+          <Button
+            className="gap-2 rounded-xl bg-blue-700 px-4 py-2 text-white hover:scale-[1.02] hover:bg-blue-800 active:border"
+            onClick={handleNewNoteClick}
+          >
+            <PlusCircle className="h-4 w-4" />
+            Add Note
+          </Button>
         </div>
 
         <NoteList
@@ -231,6 +223,7 @@ export default function NotesApp() {
           handleCloseModal={handleCloseModal}
         />
       </div>
+      <Toaster richColors position="bottom-right" />
     </div>
   );
 }

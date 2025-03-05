@@ -35,7 +35,7 @@ const NoteViewModal: React.FC<NoteViewModalProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
-        className={`max-h-[85vh] items-center justify-center overflow-auto border-2 bg-[#0a1b38] ${borderColor}`}
+        className={`max-h-[50vh] items-center justify-center overflow-auto border-2 bg-[#0a1b38] md:max-h-[80vh] ${borderColor}`}
       >
         <DialogHeader className="z-10 w-full pt-12">
           <div className="flex items-center justify-between">

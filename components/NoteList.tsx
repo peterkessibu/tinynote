@@ -14,7 +14,7 @@ import {
   QueryDocumentSnapshot,
 } from "firebase/firestore";
 import { Button } from "@/components/ui/button";
-import { Loader2, PlusCircle } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 type NoteListProps = {
   formatDate: (date: Date) => string;
@@ -28,7 +28,6 @@ const NOTES_PER_PAGE = 6;
 const NoteList: React.FC<NoteListProps> = ({
   formatDate,
   handleOpenEditModal,
-  handleNewNoteClick,
   handleDeleteNote,
 }) => {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -166,13 +165,6 @@ const NoteList: React.FC<NoteListProps> = ({
         <p className="mb-6 text-sm text-gray-400">
           Create your first note to get started
         </p>
-        <Button
-          onClick={handleNewNoteClick}
-          className="gap-2 rounded-xl bg-blue-700 px-4 py-2 text-white hover:bg-blue-800"
-        >
-          <PlusCircle className="h-4 w-4" />
-          Add Note
-        </Button>
       </div>
     );
   }

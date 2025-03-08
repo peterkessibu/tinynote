@@ -35,6 +35,10 @@ export async function POST(request) {
    - "structuredContent": A refined version of the content WITH MARKDOWN FORMATTING (use headings, lists, emphasis, etc. where appropriate).
    - "suggestedTags": Not more than 5 relevant tags as a comma-separated string.
    - "suggestedTitle": A concise title (if missing).
+
+   Note: 
+          -  Update based on currency, relevance, and coherence., DO NOT REPEAT THE OLD CONTENT IF UPDATED
+          - Correct any grammatical errors, and ensure the content is concise and clear. DO NOT INDICATED THAT THERE ARE SOME CORRECTIONS MADE
   Ensure a valid JSON response with proper markdown formatting.`;
 
     const chatSession = model.startChat({

@@ -19,7 +19,6 @@ import { Toaster, toast } from "sonner";
 export default function NotesApp() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [, setIsProcessing] = useState(false);
 
   const auth = getAuth();
 
@@ -43,8 +42,6 @@ export default function NotesApp() {
       });
       return;
     }
-
-    setIsProcessing(true);
 
     try {
       // Format tags from comma-separated string to array
@@ -71,8 +68,6 @@ export default function NotesApp() {
       setNewNote({ title: "", content: "", tags: "" });
     } catch (error) {
       console.error("Error creating note:", error);
-    } finally {
-      setIsProcessing(false);
     }
   };
 
@@ -83,8 +78,6 @@ export default function NotesApp() {
       });
       return;
     }
-
-    setIsProcessing(true);
 
     try {
       // Format tags from comma-separated string to array
@@ -101,9 +94,9 @@ export default function NotesApp() {
 
       await updateDoc(noteRef, {
         title: currentNote.title || "Untitled Note",
-        content: currentNote.content,
+        content: newNote.content,
         tags: formattedTags,
-        // Don't update createdAt to preserve original creation time
+        updatedAt: serverTimestamp(), // Add timestamp for current edit time
       });
 
       toast.success("Note updated", {
@@ -116,8 +109,6 @@ export default function NotesApp() {
       toast.error("Error updating note", {
         description: "There was a problem saving your changes",
       });
-    } finally {
-      setIsProcessing(false);
     }
   };
 

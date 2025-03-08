@@ -129,6 +129,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
       console.error("AI Assist error:", error);
     } finally {
       setIsAiLoading(false);
+      // handleCloseModal()
     }
   };
 
@@ -214,13 +215,20 @@ const NoteModal: React.FC<NoteModalProps> = ({
               <Button variant="outline" onClick={handleCloseModal}>
                 Cancel
               </Button>
-              <Button
-                onClick={isEditing ? handleEditNote : handleCreateNote}
+                <Button
+                onClick={() => {
+                  if (isEditing) {
+                  handleEditNote();
+                  } else {
+                  handleCreateNote();
+                  }
+                  handleCloseModal();
+                }}
                 disabled={!currentNote.title.trim() || !newNote.content.trim()}
                 className="text-white"
-              >
+                >
                 {isEditing ? "Save Changes" : "Create Note"}
-              </Button>
+                </Button>
             </div>
           </div>
         </DialogFooter>

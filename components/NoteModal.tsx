@@ -88,6 +88,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
         {
           input: newNote.content,
           title: currentNote.title,
+          tags: currentNote.tags,
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -97,24 +98,32 @@ const NoteModal: React.FC<NoteModalProps> = ({
       const data = response.data;
       console.log("AI Response:", data);
 
-      // Update the note content with the structured version
+      // Always update the note content with the structured version
       if (data.structuredContent) {
         setNewNote({ ...newNote, content: data.structuredContent });
+        setPlainContent(stripMarkdown(data.structuredContent));
       }
 
       // Create a new updated note object
       const updatedNote = { ...currentNote };
 
-      // Update tags based on AI response
-      if (data.suggestedTags) {
-        updatedNote.tags = data.suggestedTags;
-      }
-
-      // If there is no title, update with the AI-suggested title
-      if (!currentNote.title.trim() && data.suggestedTitle) {
+      // Update title if empty or if AI suggests it should be updated
+      if (
+        (!currentNote.title.trim() || data.shouldUpdateTitle) &&
+        data.suggestedTitle
+      ) {
         updatedNote.title = data.suggestedTitle;
       }
 
+      // Update tags if empty or if AI suggests they should be updated
+      if (
+        (!currentNote.tags.trim() || data.shouldUpdateTags) &&
+        data.suggestedTags
+      ) {
+        updatedNote.tags = data.suggestedTags;
+      }
+
+      // Apply all changes directly without notification
       setCurrentNote(updatedNote);
     } catch (error) {
       console.error("AI Assist error:", error);
@@ -149,6 +158,7 @@ const NoteModal: React.FC<NoteModalProps> = ({
               : "Add a new note with a title, content, and optional tags."}
           </DialogDescription>
         </DialogHeader>
+
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
             <Label htmlFor="title">Title</Label>

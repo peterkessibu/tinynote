@@ -172,7 +172,7 @@ export default function NotesApp() {
 
     if (days === 0) return "Today";
     if (days === 1) return "Yesterday";
-    if (days > 0 && days < 31) return `${days} days ago`;
+    if (days > 0 && days < 7) return `${days} days ago`;
     return date.toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",

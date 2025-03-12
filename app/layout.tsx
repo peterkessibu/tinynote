@@ -9,7 +9,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Tiny Notes",
+  title: "Tiny Notes AI",
   description: "AI Assisted Note Application",
 };
 

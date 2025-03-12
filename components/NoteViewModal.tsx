@@ -35,31 +35,32 @@ const NoteViewModal: React.FC<NoteViewModalProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
+        aria-label="Note content"
         className={`max-h-[50vh] items-center justify-center overflow-auto border-2 bg-[#0a1b38] md:max-h-[80vh] ${borderColor}`}
       >
+        <div className="absolute right-6 top-8 mr-4 flex">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full text-gray-400"
+            onClick={onEdit}
+          >
+            <Pencil className="size-5" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full text-red-500"
+            onClick={onDelete}
+          >
+            <Trash2 className="size-5" />
+          </Button>
+        </div>
         <DialogHeader className="z-10 w-full pt-12">
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-xl font-bold">
+            <DialogTitle className="text-wrap text-xl font-bold">
               {note.title}
             </DialogTitle>
-            <div className="flex gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full bg-white text-blue-500"
-                onClick={onEdit}
-              >
-                <Pencil className="size-5" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full text-red-500"
-                onClick={onDelete}
-              >
-                <Trash2 className="size-5" />
-              </Button>
-            </div>
           </div>
           <p className="text-sm italic text-gray-400">
             Created {formatDate(note.createdAt)}

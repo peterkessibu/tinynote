@@ -134,7 +134,11 @@ const NoteModal: React.FC<NoteModalProps> = ({
   };
 
   return (
-    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+    <Dialog
+      open={isModalOpen}
+      onOpenChange={setIsModalOpen}
+      aria-label="Note form"
+    >
       <DialogContent className="transition-all duration-300 sm:max-w-[725px]">
         {isAiLoading && (
           <>
@@ -215,20 +219,20 @@ const NoteModal: React.FC<NoteModalProps> = ({
               <Button variant="outline" onClick={handleCloseModal}>
                 Cancel
               </Button>
-                <Button
+              <Button
                 onClick={() => {
                   if (isEditing) {
-                  handleEditNote();
+                    handleEditNote();
                   } else {
-                  handleCreateNote();
+                    handleCreateNote();
                   }
                   handleCloseModal();
                 }}
                 disabled={!currentNote.title.trim() || !newNote.content.trim()}
                 className="text-white"
-                >
+              >
                 {isEditing ? "Save Changes" : "Create Note"}
-                </Button>
+              </Button>
             </div>
           </div>
         </DialogFooter>

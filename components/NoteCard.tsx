@@ -115,31 +115,31 @@ const NoteCard: React.FC<NoteCardProps> = ({
     <>
       <Card
         key={note.id}
-        className={`group flex h-full flex-col border-2 bg-[#0a1b38] transition-all duration-300 hover:scale-[1.03] hover:shadow-lg ${borderColor} cursor-pointer`}
+        className={`flex h-full flex-col border-2 bg-[#0a1b38] transition-all duration-300 hover:scale-[1.03] hover:shadow-lg ${borderColor} group relative cursor-pointer`}
         onClick={handleCardClick}
       >
-        <CardHeader className="relative">
-          {/* Edit and delete buttons */}
-          <div className="absolute right-4 top-4 flex gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full transition-opacity group-hover:opacity-100 md:opacity-0"
-              onClick={handleEditClick}
-            >
-              <Pencil className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full text-red-500 transition-opacity group-hover:opacity-100 md:opacity-0"
-              onClick={handleDeleteClick}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </div>
+        {/* Edit and delete buttons */}
+        <div className="absolute right-2 top-2 z-20 flex gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full transition-opacity group-hover:opacity-100 md:opacity-0"
+            onClick={handleEditClick}
+          >
+            <Pencil className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full text-red-500 transition-opacity group-hover:opacity-100 md:opacity-0"
+            onClick={handleDeleteClick}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+        <CardHeader className="z-10 mt-5 w-full">
           <CardTitle>{note.title}</CardTitle>
-          <CardDescription>
+          <CardDescription aria-label="Note created date">
             Created {formatDate(note.createdAt)}
           </CardDescription>
         </CardHeader>

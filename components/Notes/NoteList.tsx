@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import NoteCard, { Note } from "@/components/NoteCard";
+import NoteCard, { Note } from "@/components/Notes/NoteCard";
 import { db } from "@/app/firebase";
 import { getAuth } from "firebase/auth";
 import {
@@ -153,7 +153,7 @@ const NoteList: React.FC<NoteListProps> = ({
     return (
       <div className="flex h-64 w-full flex-col items-center justify-center">
         <Loader2 className="size-16 animate-spin text-blue-500" />
-        <span className="text-xl">Fetching Notes...</span>
+        <span className="text-xl">Getting your notes...</span>
       </div>
     );
   }

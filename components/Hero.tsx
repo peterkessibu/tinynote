@@ -7,19 +7,20 @@ import { FloatingPaper } from "@/components/Floating-paper";
 import { RoboAnimation } from "@/components/robo-animation";
 import { useState, useEffect } from "react";
 import AuthHandler from "@/components/AuthHandler";
+import SpeechModal from "@/components/Notes/SpeechModal";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/app/firebase";
+import { toast } from "sonner";
 
 export default function Hero() {
   const [showAuth, setShowAuth] = useState(false);
+  const [showSpeechModal, setShowSpeechModal] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<FirebaseUser | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
       setIsAuthenticated(!!user);
     });
 
@@ -28,17 +29,43 @@ export default function Hero() {
 
   const handleAuthClose = (authenticated = false) => {
     setShowAuth(false);
-    if (authenticated && user) {
-      router.push(`/${user.uid}/notes`);
+    if (authenticated) {
+      router.push('/notes');
     }
   };
 
   const handleGetStarted = () => {
-    if (isAuthenticated && user) {
+    if (isAuthenticated) {
       // If already authenticated, go directly to notes page
-      router.push(`/${user.uid}/notes`);
+      router.push('/notes');
     } else {
       // Otherwise show auth popup
+      setShowAuth(true);
+    }
+  };
+
+  const handleSpeechNoteSave = (noteData: { title: string; content: string; tags: string }) => {
+    // Note data received but not saved on landing page - requires authentication
+    void noteData; // Acknowledge parameter but don't use it
+
+    if (isAuthenticated) {
+      // If authenticated, redirect to notes page where they can save properly
+      router.push('/notes');
+    } else {
+      // Show auth required message
+      toast.error("Authentication required", {
+        description: "Please sign in to save your voice note"
+      });
+      setShowSpeechModal(false);
+      setShowAuth(true);
+    }
+  };
+
+  const handleOpenNotesModal = () => {
+    if (isAuthenticated) {
+      router.push('/notes');
+    } else {
+      setShowSpeechModal(false);
       setShowAuth(true);
     }
   };
@@ -58,7 +85,14 @@ export default function Hero() {
             transition={{ duration: 0.5 }}
           >
             <h1 className="mb-4 text-4xl font-bold text-white md:text-6xl lg:text-7xl">
-              Transform Your Notes with
+              Transform Your
+              <br />
+              <span className="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
+                {" "}
+                Voice & Text
+              </span>
+              <br />
+              with
               <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 {" "}
                 AI Power
@@ -72,7 +106,7 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mx-auto mb-8 max-w-2xl text-xl text-gray-400"
           >
-            Write down your notes, and our AI will transform them into clear
+            Write or speak your notes, and our AI will transform them into clear
             summaries, engaging presentations, and interactive insights.
           </motion.p>
 
@@ -101,6 +135,15 @@ export default function Hero() {
 
       {showAuth && (
         <AuthHandler handleClose={(success) => handleAuthClose(success)} />
+      )}
+
+      {showSpeechModal && (
+        <SpeechModal
+          isOpen={showSpeechModal}
+          onClose={() => setShowSpeechModal(false)}
+          onSaveNote={handleSpeechNoteSave}
+          onOpenNotesModal={handleOpenNotesModal}
+        />
       )}
     </div>
   );

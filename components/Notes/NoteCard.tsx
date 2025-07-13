@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import NoteViewModal from "@/components/NoteViewModal";
+import NoteViewModal from "@/components/Notes/NoteViewModal";
 import ReactMarkdown from "react-markdown";
 import { Toaster, toast } from "sonner";
 

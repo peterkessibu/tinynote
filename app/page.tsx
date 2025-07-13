@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LoadingPage from "@/components/Loading";
+import { Toaster } from "sonner";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -29,6 +30,7 @@ export default function Home() {
         </div>
       </main>
       <Footer />
+      <Toaster richColors position="top-center" />
     </div>
   );
 }

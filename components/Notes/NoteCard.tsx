@@ -7,9 +7,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Bell } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import NoteViewModal from "@/components/Notes/NoteViewModal";
+import ReminderModal from "@/components/Notes/ReminderModal";
 import ReactMarkdown from "react-markdown";
 import { Toaster, toast } from "sonner";
 
@@ -72,6 +73,7 @@ const NoteCard: React.FC<NoteCardProps> = ({
   const [borderColor, setBorderColor] = useState("");
   const [tagColors, setTagColors] = useState<Record<string, string>>({});
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isReminderModalOpen, setIsReminderModalOpen] = useState(false);
 
   useEffect(() => {
     // Get consistent border color based on note ID
@@ -111,6 +113,13 @@ const NoteCard: React.FC<NoteCardProps> = ({
     setIsViewModalOpen(true);
   };
 
+  // Handle reminder button click
+  const handleReminderClick = (e: React.MouseEvent) => {
+    // Stop propagation to prevent card click from triggering
+    e.stopPropagation();
+    setIsReminderModalOpen(true);
+  };
+
   return (
     <>
       <Card
@@ -118,12 +127,12 @@ const NoteCard: React.FC<NoteCardProps> = ({
         className={`flex h-full flex-col border-2 bg-[#0a1b38] transition-all duration-300 hover:scale-[1.03] hover:shadow-lg ${borderColor} group relative cursor-pointer`}
         onClick={handleCardClick}
       >
-        {/* Edit and delete buttons */}
+        {/* Edit, reminder, and delete buttons */}
         <div className="absolute right-2 top-2 z-20 flex gap-1">
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-full transition-opacity group-hover:opacity-100 md:opacity-0"
+            className="rounded-full"
             onClick={handleEditClick}
           >
             <Pencil className="h-4 w-4" />
@@ -131,7 +140,15 @@ const NoteCard: React.FC<NoteCardProps> = ({
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-full text-red-500 transition-opacity group-hover:opacity-100 md:opacity-0"
+            className="rounded-full text-yellow-500"
+            onClick={handleReminderClick}
+          >
+            <Bell className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full text-red-500"
             onClick={handleDeleteClick}
           >
             <Trash2 className="h-4 w-4" />
@@ -176,6 +193,13 @@ const NoteCard: React.FC<NoteCardProps> = ({
         formatDate={formatDate}
         onEdit={handleEditClick}
         onDelete={handleDeleteClick}
+      />
+
+      {/* Reminder Modal */}
+      <ReminderModal
+        isOpen={isReminderModalOpen}
+        onClose={() => setIsReminderModalOpen(false)}
+        note={note}
       />
     </>
   );

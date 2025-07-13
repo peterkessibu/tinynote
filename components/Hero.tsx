@@ -7,15 +7,12 @@ import { FloatingPaper } from "@/components/Floating-paper";
 import { RoboAnimation } from "@/components/robo-animation";
 import { useState, useEffect } from "react";
 import AuthHandler from "@/components/AuthHandler";
-import SpeechModal from "@/components/Notes/SpeechModal";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/app/firebase";
-import { toast } from "sonner";
 
 export default function Hero() {
   const [showAuth, setShowAuth] = useState(false);
-  const [showSpeechModal, setShowSpeechModal] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
 
@@ -44,32 +41,6 @@ export default function Hero() {
     }
   };
 
-  const handleSpeechNoteSave = (noteData: { title: string; content: string; tags: string }) => {
-    // Note data received but not saved on landing page - requires authentication
-    void noteData; // Acknowledge parameter but don't use it
-
-    if (isAuthenticated) {
-      // If authenticated, redirect to notes page where they can save properly
-      router.push('/notes');
-    } else {
-      // Show auth required message
-      toast.error("Authentication required", {
-        description: "Please sign in to save your voice note"
-      });
-      setShowSpeechModal(false);
-      setShowAuth(true);
-    }
-  };
-
-  const handleOpenNotesModal = () => {
-    if (isAuthenticated) {
-      router.push('/notes');
-    } else {
-      setShowSpeechModal(false);
-      setShowAuth(true);
-    }
-  };
-
   return (
     <div className="relative flex min-h-[calc(100vh-76px)] items-center">
       {/* Floating papers background */}
@@ -85,17 +56,12 @@ export default function Hero() {
             transition={{ duration: 0.5 }}
           >
             <h1 className="mb-4 text-4xl font-bold text-white md:text-6xl lg:text-7xl">
-              Transform Your
-              <br />
-              <span className="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
-                {" "}
-                Voice & Text
-              </span>
+              Turn Moments Into
               <br />
               with
               <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 {" "}
-                AI Power
+                Meaningful Notes
               </span>
             </h1>
           </motion.div>
@@ -106,8 +72,7 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mx-auto mb-8 max-w-2xl text-xl text-gray-400"
           >
-            Write or speak your notes, and our AI will transform them into clear
-            summaries, engaging presentations, and interactive insights.
+            From voice to text, tiny-Notes fits seamlessly into your flow — capturing ideas, syncing with your calendar, and turning scattered thoughts into smart, searchable notes.
           </motion.p>
 
           <motion.div
@@ -135,15 +100,6 @@ export default function Hero() {
 
       {showAuth && (
         <AuthHandler handleClose={(success) => handleAuthClose(success)} />
-      )}
-
-      {showSpeechModal && (
-        <SpeechModal
-          isOpen={showSpeechModal}
-          onClose={() => setShowSpeechModal(false)}
-          onSaveNote={handleSpeechNoteSave}
-          onOpenNotesModal={handleOpenNotesModal}
-        />
       )}
     </div>
   );

@@ -233,14 +233,14 @@ export default function NotesApp() {
               onClick={handleSpeechNoteClick}
             >
               <Mic className="h-4 w-4" />
-              Speak to Notes
+              <span className="hidden md:block">Speak to Notes</span>
             </Button>
             <Button
               className="gap-2 rounded-xl bg-blue-700 px-4 py-2 text-white hover:scale-[1.02] hover:bg-blue-800 active:border"
               onClick={handleNewNoteClick}
             >
               <PlusCircle className="h-4 w-4" />
-              Write Note
+              <span className="hidden md:block">Write Note</span>
             </Button>
           </div>
         </div>

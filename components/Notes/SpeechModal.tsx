@@ -43,7 +43,6 @@ const SpeechModal: React.FC<SpeechModalProps> = ({ isOpen, onClose, onSaveNote, 
         isFinal: false,
     });
     const [fullTranscript, setFullTranscript] = useState("");
-    const [isTranscribing, setIsTranscribing] = useState(false);
     const [isPolishing, setIsPolishing] = useState(false);
     const [polishedContent, setPolishedContent] = useState("");
     const [suggestedTitle, setSuggestedTitle] = useState("");
@@ -127,13 +126,12 @@ const SpeechModal: React.FC<SpeechModalProps> = ({ isOpen, onClose, onSaveNote, 
             recognitionRef.current.continuous = true;
             recognitionRef.current.interimResults = true;
             recognitionRef.current.lang = getOptimalLanguage();
-            recognitionRef.current.maxAlternatives = 3; // Get multiple alternatives for better accuracy
+            recognitionRef.current.maxAlternatives = 3;
 
             let restartTimeout: NodeJS.Timeout;
 
             recognitionRef.current.onstart = () => {
                 setRecognitionActive(true);
-                setIsTranscribing(true);
             };
 
             recognitionRef.current.onresult = (event) => {
@@ -261,7 +259,6 @@ const SpeechModal: React.FC<SpeechModalProps> = ({ isOpen, onClose, onSaveNote, 
 
             recognitionRef.current.onend = () => {
                 setRecognitionActive(false);
-                setIsTranscribing(false);
                 // Auto-restart recognition if still recording
                 if (isRecording && !isPaused) {
                     setTimeout(() => {
@@ -385,6 +382,33 @@ const SpeechModal: React.FC<SpeechModalProps> = ({ isOpen, onClose, onSaveNote, 
             updateWaveform();
         } catch (error) {
             console.error("Error starting recording:", error);
+
+            // Handle specific error types
+            if (error instanceof Error) {
+                if (error.name === 'NotAllowedError' ||
+                    error.name === 'PermissionDeniedError' ||
+                    error.message.includes('Permission denied')) {
+                    toast.error("Microphone permission denied", {
+                        description: "Please allow microphone access in your browser settings to use voice recording"
+                    });
+                } else if (error.name === 'NotFoundError') {
+                    toast.error("No microphone found", {
+                        description: "Please connect a microphone and try again"
+                    });
+                } else if (error.name === 'NotReadableError') {
+                    toast.error("Microphone is busy", {
+                        description: "Your microphone is being used by another application"
+                    });
+                } else {
+                    toast.error("Recording failed", {
+                        description: `Unable to start recording: ${error.message}`
+                    });
+                }
+            } else {
+                toast.error("Recording failed", {
+                    description: "An unknown error occurred while starting the recording"
+                });
+            }
         }
     };
 
@@ -394,7 +418,6 @@ const SpeechModal: React.FC<SpeechModalProps> = ({ isOpen, onClose, onSaveNote, 
             setIsRecording(false);
             setIsPaused(false);
             setRecognitionActive(false);
-            setIsTranscribing(false);
 
             if (recognitionRef.current) {
                 recognitionRef.current.stop();
@@ -456,7 +479,6 @@ const SpeechModal: React.FC<SpeechModalProps> = ({ isOpen, onClose, onSaveNote, 
         setShowTimeoutWarning(false);
         setWaveformData([]);
         setRecognitionActive(false);
-        setIsTranscribing(false);
     };
 
 
@@ -525,14 +547,13 @@ const SpeechModal: React.FC<SpeechModalProps> = ({ isOpen, onClose, onSaveNote, 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-[600px] bg-gray-900 text-white border-gray-700">
-                {/* Loading overlays */}
-                {(isTranscribing || isPolishing) && (
+                {/* Loading overlays - only show during AI processing, not during recording */}
+                {isPolishing && (
                     <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center">
                         <div className="text-center">
                             <div className="mx-auto mb-4 size-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
                             <p className="text-lg font-medium">
-                                {isTranscribing && "Transcribing audio..."}
-                                {isPolishing && "AI is polishing transcription..."}
+                                AI is polishing transcription...
                             </p>
                         </div>
                     </div>
